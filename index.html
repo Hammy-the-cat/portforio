@@ -1,337 +1,877 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Hammy The Cat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/locomotive-scroll@4.1.4/dist/locomotive-scroll.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: #0a0a0a; 
-            color: #ffffff; 
-            overflow-x: hidden; 
-        }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .fade-in.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .bounce {
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(10px); }
-        }
-        .tooltip-show {
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: translateX(-50%) translateY(-10px) !important;
-        }
-        .tooltip-hover:hover .tooltip-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio - Hammy The Cat</title>
+<meta name="description" content="九州の夜から発信する野良バイブコーダー、Hammy The Catのポートフォリオ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+1+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0b0e1d;           /* 夜 — base night */
+  --indigo:#141a33;        /* 藍 — surface */
+  --indigo-2:#1b2347;      /* raised surface */
+  --line:#2a3358;          /* hairline */
+  --moon:#f3e7c9;          /* 月 — warm cream */
+  --gold:#e2b35a;          /* 提灯 — lantern gold */
+  --gold-soft:rgba(226,179,90,.16);
+  --sakura:#e191a4;        /* 桜 — soft accent */
+  --teal:#6fd3c3;          /* チャート — fx accent */
+  --text:#e9e6dd;
+  --text-dim:#9aa0b8;
+  --display:'Shippori Mincho',serif;
+  --body:'Zen Kaku Gothic New',sans-serif;
+  --mono:'M PLUS 1 Code',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  background:var(--ink);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.9;
+}
+::selection{background:var(--gold);color:var(--ink)}
+a{color:inherit}
+
+/* ---------- reveal ---------- */
+.fade-in{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
+.fade-in.show{opacity:1;transform:none}
+
+/* ---------- section scaffolding ---------- */
+section{position:relative;padding:7rem 1.5rem}
+.wrap{max-width:1100px;margin:0 auto;position:relative}
+
+/* vertical kanji eyebrow */
+.tate{
+  position:absolute;left:-4.5rem;top:.4rem;
+  writing-mode:vertical-rl;
+  font-family:var(--display);font-size:1.05rem;letter-spacing:.55em;
+  color:var(--gold);opacity:.85;
+}
+.tate::after{
+  content:"";display:block;width:1px;height:64px;margin:18px auto 0;
+  background:linear-gradient(var(--gold),transparent);
+}
+.sec-head{position:relative;margin-bottom:3.5rem}
+.sec-en{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.45em;
+  text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:.9rem;
+}
+h2{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(2rem,5vw,3.1rem);letter-spacing:.04em;color:var(--moon);
+}
+h2 em{font-style:normal;color:var(--gold)}
+
+/* ====================================================
+   HERO — 九州の夜、月、猫
+==================================================== */
+.hero{
+  min-height:100svh;display:flex;align-items:center;justify-content:center;
+  padding:4rem 1.5rem 6rem;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #1d2750 0%, transparent 60%),
+    radial-gradient(900px 600px at 85% 90%, rgba(225,145,164,.07) 0%, transparent 55%),
+    var(--ink);
+}
+#sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.star{
+  position:absolute;border-radius:50%;background:var(--moon);
+  animation:twinkle var(--tw,4s) ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+
+/* ---------- 夜霧 — ゆっくり流れる薄雲 ---------- */
+.haze{
+  position:absolute;pointer-events:none;border-radius:50%;
+  filter:blur(46px);will-change:transform;
+}
+.haze.a{
+  top:10%;width:54vw;height:26vh;
+  background:radial-gradient(ellipse at center, rgba(243,231,201,.07), transparent 70%);
+  animation:drift 90s linear infinite;
+}
+.haze.b{
+  top:42%;width:44vw;height:20vh;
+  background:radial-gradient(ellipse at center, rgba(142,155,240,.06), transparent 70%);
+  animation:drift 130s linear infinite;
+  animation-delay:-60s;
+}
+@keyframes drift{
+  0%{transform:translateX(-60vw)}
+  100%{transform:translateX(110vw)}
+}
+
+/* ---------- 流れ星 ---------- */
+.shooting{
+  position:absolute;height:2px;width:130px;border-radius:2px;
+  background:linear-gradient(90deg, var(--moon), transparent);
+  opacity:0;pointer-events:none;
+  transform:rotate(-30deg);
+  animation:shoot var(--dur,11s) ease-in infinite;
+  animation-delay:var(--delay,0s);
+}
+.shooting.s1{top:14%;left:68%}
+.shooting.s2{top:30%;left:22%;--dur:15s;--delay:6s;width:100px}
+@keyframes shoot{
+  0%{opacity:0;transform:rotate(-30deg) translateX(0)}
+  2%{opacity:.95}
+  8%{opacity:0;transform:rotate(-30deg) translateX(-300px)}
+  100%{opacity:0;transform:rotate(-30deg) translateX(-300px)}
+}
+
+/* ---------- 蛍 — ページ全体を舞う光 ---------- */
+#fireflies{
+  position:fixed;inset:0;z-index:6;
+  pointer-events:none;mix-blend-mode:screen;overflow:hidden;
+}
+.fly{
+  position:absolute;bottom:-4vh;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 10px 3px rgba(226,179,90,.45);
+  opacity:0;will-change:transform;
+  animation:
+    rise var(--d,26s) linear infinite,
+    sway var(--s,5s) ease-in-out infinite alternate,
+    glow 3.4s ease-in-out infinite;
+  animation-delay:var(--delay,0s),var(--delay,0s),0s;
+}
+@keyframes rise{
+  0%{transform:translateY(0);opacity:0}
+  8%{opacity:var(--o,.55)}
+  80%{opacity:calc(var(--o,.55)*.7)}
+  100%{transform:translateY(-118vh);opacity:0}
+}
+@keyframes sway{from{margin-left:0}to{margin-left:34px}}
+@keyframes glow{0%,100%{filter:brightness(.6)}50%{filter:brightness(1.5)}}
+
+.hero-inner{position:relative;text-align:center;z-index:2}
+
+/* the moon + cat composition */
+.moon-stage{position:relative;width:min(330px,72vw);margin:0 auto 2.6rem}
+.moon{
+  width:100%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%, #fdf4dd 0%, var(--moon) 45%, #d8c193 100%);
+  box-shadow:
+    0 0 60px rgba(243,231,201,.25),
+    0 0 160px rgba(243,231,201,.12);
+  animation:moonrise 14s ease-in-out infinite;
+}
+@keyframes moonrise{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.cat{
+  position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  width:74%;display:block;
+}
+.cat .tail{transform-origin:18px 178px;animation:tailswish 5s ease-in-out infinite}
+@keyframes tailswish{
+  0%,100%{transform:rotate(0deg)}
+  40%{transform:rotate(-7deg)}
+  70%{transform:rotate(4deg)}
+}
+.cat .eye{transform-origin:center;animation:blink 6s infinite}
+.cat .eye.r{animation-delay:.05s}
+@keyframes blink{
+  0%,93%,100%{transform:scaleY(1)}
+  95%,97%{transform:scaleY(.06)}
+}
+
+.hero h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(2.6rem,8vw,5.4rem);
+  letter-spacing:.03em;line-height:1.15;color:var(--moon);
+}
+.hero h1 .dot{color:var(--gold)}
+.hero .romaji{
+  font-family:var(--mono);font-size:clamp(.7rem,1.6vw,.85rem);
+  letter-spacing:.6em;color:var(--text-dim);text-transform:uppercase;
+  display:block;margin-top:1.1rem;
+}
+.hero .tagline{
+  margin-top:1.6rem;font-size:clamp(1rem,2.4vw,1.25rem);color:var(--text-dim);
+}
+.hero .tagline strong{
+  color:var(--gold);font-weight:700;
+  border-bottom:1px solid var(--gold-soft);padding-bottom:2px;
+}
+.scroll-cue{
+  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.7rem;
+  color:var(--text-dim);font-family:var(--mono);font-size:.65rem;letter-spacing:.4em;
+  text-transform:uppercase;z-index:2;
+}
+.scroll-cue span{writing-mode:vertical-rl}
+.scroll-cue i{
+  width:1px;height:54px;background:linear-gradient(var(--gold),transparent);
+  display:block;animation:drip 2.2s ease-in-out infinite;
+}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ====================================================
+   ABOUT
+==================================================== */
+.about{background:linear-gradient(var(--ink), var(--indigo) 30%, var(--indigo))}
+.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4.5rem;align-items:start}
+
+/* round avatar */
+.avatar-row{display:flex;align-items:center;gap:1.4rem;margin-bottom:2rem}
+.avatar{
+  position:relative;flex-shrink:0;
+  width:128px;height:128px;border-radius:50%;
+  padding:4px;
+  background:conic-gradient(from 210deg, var(--gold), #f0cf8a, var(--gold-soft), var(--gold));
+  box-shadow:0 0 36px rgba(226,179,90,.22), 0 10px 28px rgba(0,0,0,.4);
+}
+.avatar img{
+  width:100%;height:100%;border-radius:50%;
+  object-fit:cover;display:block;
+  border:3px solid var(--ink);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.avatar:hover img{transform:scale(1.06) rotate(-2deg)}
+.avatar::after{
+  content:"🐾";position:absolute;right:-4px;bottom:-2px;
+  font-size:1.2rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
+}
+.avatar-name{font-family:var(--display);color:var(--moon);font-size:1.1rem;letter-spacing:.06em}
+.avatar-name small{
+  display:block;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.32em;color:var(--text-dim);text-transform:uppercase;margin-top:.3rem;
+}
+.about p{color:var(--text);margin-bottom:1.4rem;font-size:1.02rem}
+.about p:last-child{margin-bottom:0}
+.about .lede::first-letter{
+  font-family:var(--display);font-size:2.4em;color:var(--gold);
+  float:left;line-height:1;padding-right:.12em;
+}
+
+/* interests */
+.interests h3{
+  font-family:var(--display);font-size:1.35rem;color:var(--moon);
+  letter-spacing:.1em;margin-bottom:1.6rem;
+}
+.int-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.int-card{
+  position:relative;cursor:default;isolation:isolate;
+  border-radius:16px;padding:1.7rem 1.2rem 1.5rem;text-align:center;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.045), transparent 45%),
+    radial-gradient(120% 90% at 50% 115%, var(--c,var(--gold-soft)), transparent 60%),
+    var(--indigo-2);
+  border:1px solid var(--line);
+  overflow:hidden;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .5s,box-shadow .5s;
+}
+/* 透かしの漢字 */
+.int-card::after{
+  content:attr(data-kanji);
+  position:absolute;right:-8px;bottom:-26px;z-index:-1;
+  font-family:var(--display);font-weight:800;font-size:6rem;line-height:1;
+  color:var(--b,var(--gold));opacity:.07;
+  transition:opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1);
+}
+/* 光のスイープ */
+.int-card::before{
+  content:"";position:absolute;top:0;bottom:0;left:-80%;width:55%;
+  background:linear-gradient(105deg, transparent, rgba(255,255,255,.10), transparent);
+  transform:skewX(-18deg);transition:left .8s ease;pointer-events:none;
+}
+.int-card:hover,.int-card:focus-visible{
+  transform:translateY(-6px);
+  border-color:var(--b,var(--gold));
+  box-shadow:0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--b,var(--gold)) inset, 0 0 28px -8px var(--b,var(--gold));
+}
+.int-card:hover::before{left:130%}
+.int-card:hover::after{opacity:.14;transform:translateY(-6px) rotate(-4deg)}
+/* アイコンの光るオーブ */
+.int-card .orb{
+  width:64px;height:64px;margin:0 auto .85rem;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.10), rgba(255,255,255,.02));
+  border:1px solid var(--line);
+  box-shadow:0 0 22px -6px var(--b,var(--gold)) inset;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1), border-color .5s, box-shadow .5s;
+}
+.int-card:hover .orb{
+  transform:scale(1.1) rotate(-5deg);
+  border-color:var(--b,var(--gold));
+  box-shadow:0 0 26px -4px var(--b,var(--gold)) inset, 0 0 22px -6px var(--b,var(--gold));
+}
+.int-card .ic{font-size:1.9rem;line-height:1;display:block;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4))}
+.int-card h4{font-family:var(--display);font-size:1.08rem;color:var(--moon);letter-spacing:.06em;font-weight:600;margin-bottom:.15rem}
+.int-card small{font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;color:var(--text-dim);text-transform:uppercase}
+.int-card .bar{
+  width:0;height:2px;margin:.7rem auto 0;border-radius:2px;
+  background:linear-gradient(90deg, transparent, var(--b,var(--gold)), transparent);
+  transition:width .5s ease;
+}
+.int-card:hover .bar,.int-card:focus-visible .bar{width:64%}
+
+/* speech bubble tooltip area */
+.bubble-row{display:flex;align-items:flex-end;gap:.8rem;margin-top:1.4rem;min-height:96px}
+.bubble-cat{font-size:1.9rem;line-height:1;transform:scaleX(-1);filter:grayscale(.2)}
+.bubble{
+  flex:1;position:relative;
+  background:var(--indigo-2);border:1px solid var(--line);border-radius:14px;
+  padding:.95rem 1.2rem;font-size:.95rem;color:var(--text-dim);
+  transition:border-color .35s,color .35s,background .35s;
+}
+.bubble::before{
+  content:"";position:absolute;left:-7px;bottom:14px;width:12px;height:12px;
+  background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+  transform:rotate(45deg);transition:border-color .35s;
+}
+.bubble.active{color:var(--moon);border-color:var(--bb,var(--gold))}
+.bubble.active::before{border-color:var(--bb,var(--gold))}
+
+/* ====================================================
+   PROJECTS
+==================================================== */
+.projects{background:var(--ink)}
+.projects .lead{color:var(--text-dim);max-width:640px;margin-top:-2rem;margin-bottom:3.2rem}
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.proj{
+  position:relative;display:flex;flex-direction:column;text-decoration:none;
+  background:var(--indigo);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .55s,box-shadow .55s;
+}
+.proj:hover,.proj:focus-visible{
+  transform:translateY(-10px);
+  border-color:var(--pb,var(--gold));
+  box-shadow:0 26px 56px rgba(0,0,0,.5), 0 0 36px -14px var(--pb,var(--gold));
+}
+/* 通し番号（壱・弐・参） */
+.proj .num{
+  position:absolute;top:.9rem;left:1.1rem;z-index:3;
+  font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.3em;
+  color:var(--moon);opacity:.85;
+  writing-mode:vertical-rl;
+  padding:.6rem .3rem;
+  background:rgba(11,14,29,.45);border:1px solid rgba(243,231,201,.25);
+  border-radius:999px;backdrop-filter:blur(4px);
+}
+/* ビジュアル */
+.proj-visual{
+  position:relative;height:210px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.proj-visual .scene{
+  position:absolute;inset:0;width:100%;height:100%;
+  transition:transform .9s cubic-bezier(.2,.8,.2,1);
+}
+.proj:hover .proj-visual .scene{transform:scale(1.07)}
+.proj-visual::after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(rgba(11,14,29,0) 40%, rgba(11,14,29,.72));
+}
+.proj-visual .big{
+  position:relative;z-index:2;font-size:3.6rem;
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.55));
+  transition:transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.proj:hover .proj-visual .big{transform:scale(1.14) translateY(-4px)}
+.proj-visual .zen{
+  font-family:var(--display);font-size:3.8rem;font-weight:800;color:var(--moon);
+  text-shadow:0 6px 32px rgba(0,0,0,.5);
+}
+/* 「見る」リボン — ホバーで現れる */
+.proj .view{
+  position:absolute;right:1rem;bottom:.9rem;z-index:3;
+  display:flex;align-items:center;gap:.45rem;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ink);background:linear-gradient(120deg,var(--gold),#f0cf8a);
+  padding:.45rem .95rem;border-radius:999px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .45s,transform .45s;
+}
+.proj:hover .view,.proj:focus-visible .view{opacity:1;transform:none}
+.proj .view svg{width:11px;height:11px}
+/* 本文 */
+.proj-body{padding:1.7rem 1.6rem 1.9rem;display:flex;flex-direction:column;flex:1;position:relative}
+.proj-body::before{
+  content:"";position:absolute;top:0;left:1.6rem;right:1.6rem;height:1px;
+  background:linear-gradient(90deg, var(--pb,var(--gold)), transparent 70%);
+  opacity:.45;
+}
+.proj-body .en{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--pb,var(--gold));margin-bottom:.55rem;
+}
+.proj-body h3{
+  font-family:var(--display);font-size:1.3rem;color:var(--moon);
+  letter-spacing:.04em;margin-bottom:.75rem;
+}
+.proj-body p{font-size:.92rem;color:var(--text-dim);flex:1;margin:0}
+
+/* ====================================================
+   CONTACT
+==================================================== */
+.contact{
+  background:
+    radial-gradient(800px 420px at 50% 115%, rgba(226,179,90,.10), transparent 65%),
+    linear-gradient(var(--ink), var(--indigo));
+  text-align:center;
+}
+.contact .tate{left:50%;transform:translateX(-50%);top:-1.5rem;position:relative;display:inline-block;margin-bottom:2rem}
+.contact h2{margin-bottom:1.6rem}
+.contact .msg{color:var(--text-dim);max-width:560px;margin:0 auto 1rem}
+.contact .msg-jp{color:var(--text);max-width:560px;margin:0 auto 3.2rem}
+.contact-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:1.2rem;
+  justify-content:center;margin-bottom:3.2rem;
+}
+.c-card{
+  position:relative;display:block;text-decoration:none;text-align:center;
+  border-radius:16px;padding:1.8rem 1.4rem;overflow:hidden;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,border-color .45s;
+}
+.c-card:hover,.c-card:focus-visible{transform:translateY(-6px)}
+.c-card .logo{display:flex;justify-content:center;margin-bottom:.95rem}
+.c-card .logo svg{width:30px;height:30px}
+.c-card h3{font-family:var(--body);font-weight:700;font-size:1rem;letter-spacing:.02em;margin-bottom:.3rem}
+.c-card p{font-family:var(--mono);font-size:.78rem;transition:opacity .35s}
+.c-card .go{
+  position:absolute;top:.9rem;right:1rem;
+  opacity:0;transform:translate(-4px,4px);transition:.4s;
+}
+.c-card:hover .go{opacity:1;transform:none}
+.c-card .go svg{width:13px;height:13px}
+
+/* X — 黒背景に白 */
+.c-x{
+  background:#000;
+  border:1px solid #2f3336;
+  color:#fff;
+}
+.c-x h3{color:#fff}
+.c-x p{color:#8b98a5}
+.c-x:hover{border-color:#e7e9ea;box-shadow:0 16px 38px rgba(0,0,0,.55), 0 0 26px -10px rgba(255,255,255,.45)}
+.c-x:hover p{color:#e7e9ea}
+.c-x .logo svg,.c-x .go svg{fill:#fff;stroke:#fff}
+
+/* Substack — オレンジと白 */
+.c-substack{
+  background:#FF6719;
+  border:1px solid #ff8547;
+  color:#fff;
+}
+.c-substack::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(155deg, rgba(255,255,255,.16), transparent 55%);
+  pointer-events:none;
+}
+.c-substack h3{color:#fff}
+.c-substack p{color:rgba(255,255,255,.85)}
+.c-substack:hover{border-color:#fff;box-shadow:0 16px 38px rgba(0,0,0,.45), 0 0 30px -8px rgba(255,103,25,.8)}
+.c-substack:hover p{color:#fff}
+.c-substack .logo svg,.c-substack .go svg{fill:#fff;stroke:#fff}
+.cta-row{display:flex;justify-content:center;align-items:center;gap:1.1rem;flex-wrap:wrap}
+.cta{
+  display:inline-block;text-decoration:none;
+  font-family:var(--display);font-size:1.05rem;letter-spacing:.12em;
+  color:var(--ink);background:linear-gradient(120deg,var(--gold),#f0cf8a);
+  padding:1rem 3.2rem;border-radius:999px;
+  box-shadow:0 10px 32px rgba(226,179,90,.25);
+  transition:transform .4s,box-shadow .4s;
+}
+.cta:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(226,179,90,.38)}
+.cta.substack{
+  color:#fff;
+  background:linear-gradient(120deg,#FF6719,#ff8a47);
+  box-shadow:0 10px 32px rgba(255,103,25,.28);
+}
+.cta.substack:hover{box-shadow:0 16px 42px rgba(255,103,25,.42)}
+footer{
+  margin-top:5rem;padding-top:2.2rem;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--text-dim);
+}
+footer .paw{color:var(--gold)}
+
+/* ====================================================
+   responsive / a11y
+==================================================== */
+@media (max-width:980px){
+  .tate{position:static;writing-mode:horizontal-tb;letter-spacing:.4em;display:inline-block;margin-bottom:1rem}
+  .tate::after{display:none}
+  .about-grid{grid-template-columns:1fr;gap:3.5rem}
+  .proj-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  section{padding:5rem 1.25rem}
+  .proj-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}
+  .int-grid{grid-template-columns:1fr 1fr}
+}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .fade-in{opacity:1;transform:none}
+}
+</style>
 </head>
 <body>
-    <div data-scroll-container>
-        <!-- Hero Section -->
-        <section class="h-screen flex items-center justify-center relative bg-gradient-to-br from-gray-900 via-black to-gray-800" data-scroll-section>
-            <div class="text-center z-10">
-                <h1 class="fade-in text-6xl md:text-8xl lg:text-9xl font-black mb-6 bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                    Hammy The Cat
-                </h1>
-                <p class="fade-in text-xl md:text-2xl lg:text-3xl text-gray-400 font-light tracking-wide" style="animation-delay: 0.3s;">
-                    Stray Vibecoder
-                </p>
-                <div class="fade-in mt-12 flex justify-center items-center text-gray-500" style="animation-delay: 0.6s;">
-                    <span class="mr-3 text-sm tracking-widest uppercase">Scroll to explore</span>
-                    <div class="w-px h-12 bg-gray-600 mx-4"></div>
-                </div>
-            </div>
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bounce">
-                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                </svg>
-            </div>
-            <div class="absolute inset-0 bg-black opacity-20"></div>
-            <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-                <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500 opacity-10 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500 opacity-5 rounded-full blur-3xl"></div>
-            </div>
-        </section>
 
-        <!-- About Section -->
-        <section class="min-h-screen flex items-center justify-center py-20 bg-gray-950" data-scroll-section>
-            <div class="max-w-6xl mx-auto px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div class="fade-in">
-                        <h2 class="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                            About Me
-                        </h2>
-                        <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
-                            <p>はじめまして！九州の魅力に魅了された好奇心旺盛な人間です。福岡の街並み、阿蘇の自然、桜島の迫力に感動し、博多ラーメンや海の幸などの地元食文化を愛しています。</p>
-                            <p>Xでは九州の素敵なスポットやユーモアある話題をシェアし、地域愛を胸に楽しい発見を追求。テクノロジーと伝統の融合に興味を持ちながら、日常の驚きや感動を大切にしています。</p>
-                            <p>Xで人々と繋がることを楽しみ、九州から発信する魅力的なコンテンツを通じて、多くの方と素敵な交流を築いていきたいと思っています。</p>
-                        </div>
-                    </div>
-                    <div class="fade-in space-y-8">
-                        <h3 class="text-3xl font-semibold text-white mb-8">Interests</h3>
-                        <div class="grid grid-cols-2 gap-6 pb-20">
-                            <div class="tooltip-trigger group relative overflow-hidden bg-black rounded-2xl border border-gray-800 hover:border-purple-500 transition-all duration-500 transform hover:scale-105 hover:-rotate-1" 
-                                 data-tooltip="駆け出しのバイブコーダー。<br>これからClaude Codeと仲良くなりたい💻"
-                                 data-color="purple">
-                                <div class="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div class="relative p-8 flex flex-col items-center text-center">
-                                    <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-300">💻</div>
-                                    <h4 class="text-white font-bold text-xl mb-2 group-hover:text-purple-300 transition-colors">Vibe coding</h4>
-                                    <div class="w-12 h-px bg-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </div>
-                                <div class="absolute top-0 right-0 w-20 h-20 bg-purple-500/10 rounded-full blur-xl"></div>
-                            </div>
-                            <div class="tooltip-trigger group relative overflow-hidden bg-black rounded-2xl border border-gray-800 hover:border-orange-500 transition-all duration-500 transform hover:scale-105 hover:rotate-1"
-                                 data-tooltip="無類のネコ好き。セツナさん大好き。<br>LLACもお迎え中🐈"
-                                 data-color="orange">
-                                <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 to-yellow-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div class="relative p-8 flex flex-col items-center text-center">
-                                    <div class="text-6xl mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">🐱</div>
-                                    <h4 class="text-white font-bold text-xl mb-2 group-hover:text-orange-300 transition-colors">The cat</h4>
-                                    <div class="w-12 h-px bg-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </div>
-                                <div class="absolute bottom-0 left-0 w-16 h-16 bg-orange-500/10 rounded-full blur-xl"></div>
-                            </div>
-                            <div class="tooltip-trigger group relative overflow-hidden bg-black rounded-2xl border border-gray-800 hover:border-green-500 transition-all duration-500 transform hover:scale-105 hover:rotate-1"
-                                 data-tooltip="九州生まれ、九州育ち。<br>豚骨ラーメンをこよなく愛してる🍜"
-                                 data-color="green">
-                                <div class="absolute inset-0 bg-gradient-to-br from-green-600/20 to-emerald-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div class="relative p-8 flex flex-col items-center text-center">
-                                    <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-300">🏔️</div>
-                                    <h4 class="text-white font-bold text-xl mb-2 group-hover:text-green-300 transition-colors">Kyushu</h4>
-                                    <div class="w-12 h-px bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </div>
-                                <div class="absolute top-0 left-0 w-24 h-24 bg-green-500/10 rounded-full blur-xl"></div>
-                            </div>
-                            <div class="tooltip-trigger group relative overflow-hidden bg-black rounded-2xl border border-gray-800 hover:border-blue-500 transition-all duration-500 transform hover:scale-105 hover:-rotate-1"
-                                 data-tooltip="趣味。。。。<br>チャート図をいつまでも見続けられる📈"
-                                 data-color="blue">
-                                <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div class="relative p-8 flex flex-col items-center text-center">
-                                    <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-300">📈</div>
-                                    <h4 class="text-white font-bold text-xl mb-2 group-hover:text-blue-300 transition-colors">FX</h4>
-                                    <div class="w-12 h-px bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                </div>
-                                <div class="absolute bottom-right-0 w-18 h-18 bg-blue-500/10 rounded-full blur-xl"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Tooltip Display Area -->
-                        <div id="tooltip-area" class="mt-8 min-h-[80px] flex items-center justify-center">
-                            <div id="tooltip-content" class="opacity-0 transition-all duration-300 px-6 py-4 rounded-lg text-center text-white text-lg font-medium max-w-md">
-                                ブロックにマウスを乗せてメッセージを表示
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div id="sky" aria-hidden="true">
+    <div class="haze a"></div>
+    <div class="haze b"></div>
+    <span class="shooting s1"></span>
+    <span class="shooting s2"></span>
+  </div>
 
-        <!-- Projects Section -->
-        <section class="min-h-screen py-20 bg-black" data-scroll-section>
-            <div class="max-w-7xl mx-auto px-6 lg:px-8">
-                <div class="text-center mb-20 fade-in">
-                    <h2 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                        Featured Projects
-                    </h2>
-                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
-                        迷えるバイブコーダーHammyの迷える作品集🐈❔どうぞお楽しみくださいませ👀
-                    </p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <a href="https://hammy-the-cat.github.io/fx-margin-calculator/" target="_blank" class="fade-in group bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-700 transition-all duration-500 block hover:scale-105">
-                        <div class="h-64 bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                            <div class="text-center z-10">
-                                <div class="text-6xl mb-2">💱</div>
-                                <h3 class="text-white text-2xl font-bold">FX Margin Calculator</h3>
-                            </div>
-                            <div class="absolute bottom-2 right-2 bg-white bg-opacity-20 rounded-full p-2">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-white mb-4">FX Margin Calculator</h3>
-                            <p class="text-gray-400 mb-6">FX取引におけるマージン（必要証拠金）を簡単に計算できるツール。リアルタイムの為替レートと直感的なUIで、効率的なリスク管理をサポートします。</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">HTML</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">CSS</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">JavaScript</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">Exchange API</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://hammy-the-cat.github.io/economic-calendar/economic-calendar.html" target="_blank" class="fade-in group bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-700 transition-all duration-500 block hover:scale-105">
-                        <div class="h-64 bg-gradient-to-r from-pink-600 to-orange-600 flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                            <div class="text-center z-10">
-                                <div class="text-6xl mb-2">📊</div>
-                                <h3 class="text-white text-2xl font-bold">Economic Calendar</h3>
-                            </div>
-                            <div class="absolute bottom-2 right-2 bg-white bg-opacity-20 rounded-full p-2">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-white mb-4">Economic Calendar</h3>
-                            <p class="text-gray-400 mb-6">近未来ネオンテイストの経済指標カレンダー。インスタグラム風グラデーションと5段階の星評価システムで、日本時間での重要経済指標を視覚的に表示します。</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">HTML</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">CSS</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">JavaScript</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">FRED API</span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://hammy-the-cat.github.io/zen-omikuji/" target="_blank" class="fade-in group bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-gray-700 transition-all duration-500 block hover:scale-105">
-                        <div class="h-64 bg-gradient-to-r from-emerald-700 to-stone-700 flex items-center justify-center relative overflow-hidden">
-                            <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-                            <div class="text-center z-10">
-                                <div class="text-6xl mb-2">禅</div>
-                                <h3 class="text-white text-2xl font-bold">Zen Omikuji</h3>
-                            </div>
-                            <div class="absolute bottom-2 right-2 bg-white bg-opacity-20 rounded-full p-2">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="p-8">
-                            <h3 class="text-2xl font-bold text-white mb-4">Zen Omikuji</h3>
-                            <p class="text-gray-400 mb-6">静かな和の雰囲気で今日の運勢を引ける、おみくじアプリです。シンプルな操作で気軽に楽しめる小さなWeb体験です。</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">HTML</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">CSS</span>
-                                <span class="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700">JavaScript</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="min-h-screen flex items-center justify-center py-20 bg-gradient-to-b from-black to-gray-950" data-scroll-section>
-            <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-                <h2 class="fade-in text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    Let's Connect
-                </h2>
-                <p class="fade-in text-xl text-gray-400 mb-4 max-w-2xl mx-auto leading-relaxed">
-                    Thanks for visiting my portfolio! I'm always excited to discuss new opportunities and collaborate on interesting projects.
-                </p>
-                <p class="fade-in text-lg text-gray-500 mb-16 max-w-2xl mx-auto leading-relaxed">
-                    ポートフォリオをご覧いただき、ありがとうございます！<br>
-                    一緒にバイブコーディングを楽しみましょう❣💻
-                </p>
-                <div class="fade-in grid md:grid-cols-2 gap-8 mb-16 max-w-2xl mx-auto">
-                    <div class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-gray-700 transition-all duration-300">
-                        <div class="text-blue-400 text-3xl mb-4">🐱</div>
-                        <h3 class="text-white font-semibold mb-2">Follow me on X</h3>
-                        <a href="https://x.com/Hammy_the_cat" target="_blank" class="text-gray-400 hover:text-blue-400 transition-colors">@Hammy_the_cat</a>
-                    </div>
-                    <a href="https://substack.com/@hammythecat" target="_blank" rel="noopener noreferrer" class="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-orange-500 transition-all duration-300 block">
-                        <div class="text-orange-400 text-3xl mb-4 font-black">S</div>
-                        <h3 class="text-white font-semibold mb-2">Substack</h3>
-                        <p class="text-gray-400 hover:text-orange-400 transition-colors">@hammythecat</p>
-                    </a>
-                </div>
-                <div class="fade-in space-y-8">
-                    <a href="https://x.com/Hammy_the_cat" target="_blank" class="inline-block px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        Follow on X
-                    </a>
-                </div>
-                <div class="fade-in mt-20 pt-8 border-t border-gray-800">
-                    <p class="text-gray-500 text-sm">
-                        © 2024 Hammy The Cat. Built with HTML, CSS & JavaScript.
-                    </p>
-                </div>
-            </div>
-        </section>
+  <div class="hero-inner">
+    <div class="moon-stage fade-in">
+      <div class="moon" aria-hidden="true"></div>
+      <!-- 月の前に座る猫 -->
+      <svg class="cat" viewBox="0 0 240 190" aria-hidden="true">
+        <g fill="#0b0e1d">
+          <!-- tail -->
+          <path class="tail" d="M38 178 C8 172 2 138 22 128 C34 122 44 132 40 142 C37 149 28 149 26 143 C24 138 30 134 33 137 C30 130 18 134 18 144 C18 158 32 168 52 170 Z"/>
+          <!-- body -->
+          <path d="M120 188 C70 188 52 152 58 116 C62 92 76 76 86 62 L80 30 L102 48 C108 45 114 44 121 44 C128 44 134 45 140 48 L162 30 L156 62 C166 76 180 92 184 116 C190 152 172 188 120 188 Z"/>
+        </g>
+        <!-- eyes -->
+        <g class="eye">
+          <ellipse cx="103" cy="92" rx="9" ry="11" fill="#e2b35a"/>
+          <circle class="pupil" cx="103" cy="92" r="4" fill="#0b0e1d"/>
+        </g>
+        <g class="eye r">
+          <ellipse cx="139" cy="92" rx="9" ry="11" fill="#e2b35a"/>
+          <circle class="pupil" cx="139" cy="92" r="4" fill="#0b0e1d"/>
+        </g>
+      </svg>
     </div>
 
-    <script>
-        // Initialize Locomotive Scroll
-        const scroll = new LocomotiveScroll({
-            el: document.querySelector('[data-scroll-container]'),
-            smooth: true,
-            multiplier: 1,
-            class: 'is-revealed'
-        });
+    <h1 class="fade-in">Hammy The Cat</h1>
+    <span class="romaji fade-in">Stray Vibecoder</span>
+    <p class="tagline fade-in">九州の夜から、<strong>気ままにコードを書く野良猫</strong>です。</p>
+  </div>
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+  <div class="scroll-cue" aria-hidden="true">
+    <span>下へ</span>
+    <i></i>
+  </div>
+</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
-                }
-            });
-        }, observerOptions);
+<!-- ================= ABOUT ================= -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="sec-head fade-in">
+      <span class="tate">自己紹介</span>
+      <span class="sec-en">About Me</span>
+      <h2>猫のように、<em>気の向くまま</em>に。</h2>
+    </div>
 
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach((el) => {
-            observer.observe(el);
-        });
+    <div class="about-grid">
+      <div class="fade-in">
+        <div class="avatar-row">
+          <div class="avatar">
+            <img src="hammy.png" alt="Hammy The Cat のアイコン — 緑の瞳のキジトラ猫">
+          </div>
+          <div class="avatar-name">
+            Hammy The Cat
+            <small>Stray Vibecoder</small>
+          </div>
+        </div>
+        <p class="lede">はじめまして、Hammy The Catです。九州の片すみに暮らす、駆け出しの「野良バイブコーダー」。AIと一緒にコードを書く楽しさに目覚めて、思いついたものを気ままに形にしています。</p>
+        <p>このサイトに並んでいるのは、そんな夜更かしの産物たち。為替の計算ツールから、静かに今日の運勢を引けるおみくじまで、「あったらいいな」と「作ってみたいな」を原動力に、ひとつずつ増やしています。猫を愛で、ゲームで遊ぶ時間も大切な充電タイムです。</p>
+        <p>まだまだ寄り道の多い野良猫ですが、作ったものや学んだことはXとSubstackで発信中。同じようにものづくりを楽しむ方と、ゆるくつながれたらうれしいです🐾</p>
+      </div>
 
-        // Initial animation for hero section
-        setTimeout(() => {
-            document.querySelectorAll('.fade-in').forEach((el, index) => {
-                if (index < 3) { // Only first 3 elements in hero
-                    el.classList.add('show');
-                }
-            });
-        }, 500);
+      <div class="interests fade-in">
+        <h3>Interests</h3>
+        <div class="int-grid">
+          <div class="int-card" tabindex="0" data-kanji="技" style="--b:#a98ae0;--c:rgba(151,113,219,.16)"
+               data-tooltip="駆け出しのバイブコーダー。<br>これからClaude Codeと仲良くなりたい💻" data-color="#a98ae0">
+            <div class="orb"><span class="ic">💻</span></div>
+            <h4>Vibe coding</h4>
+            <small>code</small>
+            <div class="bar"></div>
+          </div>
+          <div class="int-card" tabindex="0" data-kanji="猫" style="--b:#e2a35a;--c:rgba(226,163,90,.16)"
+               data-tooltip="無類のネコ好き。セツナさん大好き。<br>LLACもお迎え中🐈" data-color="#e2a35a">
+            <div class="orb"><span class="ic">🐱</span></div>
+            <h4>The cat</h4>
+            <small>neko</small>
+            <div class="bar"></div>
+          </div>
+          <div class="int-card" tabindex="0" data-kanji="九" style="--b:#7ccf9a;--c:rgba(124,207,154,.16)"
+               data-tooltip="九州在住の野良猫。<br>豚骨ラーメンをこよなく愛してる🍜" data-color="#7ccf9a">
+            <div class="orb"><span class="ic">🏔️</span></div>
+            <h4>Kyushu</h4>
+            <small>home</small>
+            <div class="bar"></div>
+          </div>
+          <div class="int-card" tabindex="0" data-kanji="遊" style="--b:#6fb6e8;--c:rgba(111,182,232,.16)"
+               data-tooltip="ゲームも大好き。<br>気づいたら夜が明けてる🎮" data-color="#6fb6e8">
+            <div class="orb"><span class="ic">🎮</span></div>
+            <h4>Game</h4>
+            <small>play</small>
+            <div class="bar"></div>
+          </div>
+        </div>
 
-        // Tooltip functionality
-        const tooltipContent = document.getElementById('tooltip-content');
-        const tooltipTriggers = document.querySelectorAll('.tooltip-trigger');
-        
-        const colorMap = {
-            purple: 'bg-purple-900 border border-purple-600',
-            orange: 'bg-orange-900 border border-orange-600', 
-            green: 'bg-green-900 border border-green-600',
-            blue: 'bg-blue-900 border border-blue-600'
-        };
+        <div class="bubble-row">
+          <span class="bubble-cat" aria-hidden="true">🐈</span>
+          <div class="bubble" id="bubble" aria-live="polite">カードにマウスを乗せると、猫がしゃべります。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        tooltipTriggers.forEach(trigger => {
-            trigger.addEventListener('mouseenter', () => {
-                const message = trigger.getAttribute('data-tooltip');
-                const color = trigger.getAttribute('data-color');
-                
-                tooltipContent.innerHTML = message;
-                tooltipContent.className = `transition-all duration-300 px-6 py-4 rounded-lg text-center text-white text-lg font-medium max-w-md ${colorMap[color]} opacity-100`;
-            });
-            
-            trigger.addEventListener('mouseleave', () => {
-                tooltipContent.className = 'opacity-0 transition-all duration-300 px-6 py-4 rounded-lg text-center text-white text-lg font-medium max-w-md';
-            });
-        });
-    </script>
+<!-- ================= PROJECTS ================= -->
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="sec-head fade-in">
+      <span class="tate">作品集</span>
+      <span class="sec-en">Featured Projects</span>
+      <h2>迷える野良猫の、<em>迷える作品集</em>。</h2>
+    </div>
+    <p class="lead fade-in">迷えるバイブコーダーHammyの迷える作品集🐈❔どうぞお楽しみくださいませ👀</p>
+
+    <div class="proj-grid">
+      <a class="proj fade-in" style="--pb:#8e9bf0" href="https://hammy-the-cat.github.io/fx-margin-calculator/" target="_blank" rel="noopener noreferrer">
+        <span class="num">作品 壱</span>
+        <div class="proj-visual">
+          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="g-fx" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#222f63"/><stop offset="1" stop-color="#3a2a6e"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="210" fill="url(#g-fx)"/>
+            <!-- ローソク足 -->
+            <g opacity=".32" stroke-linecap="round">
+              <line x1="60" y1="40" x2="60" y2="180" stroke="#8e9bf0" stroke-width="2"/>
+              <rect x="52" y="80" width="16" height="56" rx="3" fill="#8e9bf0"/>
+              <line x1="120" y1="60" x2="120" y2="190" stroke="#6fd3c3" stroke-width="2"/>
+              <rect x="112" y="96" width="16" height="64" rx="3" fill="#6fd3c3"/>
+              <line x1="180" y1="30" x2="180" y2="150" stroke="#8e9bf0" stroke-width="2"/>
+              <rect x="172" y="52" width="16" height="60" rx="3" fill="#8e9bf0"/>
+              <line x1="240" y1="55" x2="240" y2="175" stroke="#6fd3c3" stroke-width="2"/>
+              <rect x="232" y="84" width="16" height="58" rx="3" fill="#6fd3c3"/>
+              <line x1="300" y1="20" x2="300" y2="140" stroke="#8e9bf0" stroke-width="2"/>
+              <rect x="292" y="38" width="16" height="62" rx="3" fill="#8e9bf0"/>
+              <line x1="356" y1="46" x2="356" y2="160" stroke="#6fd3c3" stroke-width="2"/>
+              <rect x="348" y="66" width="16" height="56" rx="3" fill="#6fd3c3"/>
+            </g>
+            <path d="M20 160 C90 120 140 150 200 100 S330 60 390 36" fill="none" stroke="#f3e7c9" stroke-width="2" stroke-dasharray="5 7" opacity=".5"/>
+          </svg>
+          <span class="big">💱</span>
+          <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
+        </div>
+        <div class="proj-body">
+          <span class="en">FX Tool</span>
+          <h3>FX Margin Calculator</h3>
+          <p>FX取引におけるマージン（必要証拠金）を簡単に計算できるツール。リアルタイムの為替レートと直感的なUIで、効率的なリスク管理をサポートします。</p>
+        </div>
+      </a>
+
+      <a class="proj fade-in" style="--pb:#ef9d7c" href="https://hammy-the-cat.github.io/economic-calendar/economic-calendar.html" target="_blank" rel="noopener noreferrer">
+        <span class="num">作品 弐</span>
+        <div class="proj-visual">
+          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="g-cal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#6e2a4a"/><stop offset="1" stop-color="#7a4322"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="210" fill="url(#g-cal)"/>
+            <!-- カレンダーの罫線 -->
+            <g stroke="#f3e7c9" opacity=".18" stroke-width="1">
+              <line x1="0" y1="55" x2="400" y2="55"/><line x1="0" y1="105" x2="400" y2="105"/><line x1="0" y1="155" x2="400" y2="155"/>
+              <line x1="66" y1="0" x2="66" y2="210"/><line x1="133" y1="0" x2="133" y2="210"/><line x1="200" y1="0" x2="200" y2="210"/>
+              <line x1="266" y1="0" x2="266" y2="210"/><line x1="333" y1="0" x2="333" y2="210"/>
+            </g>
+            <!-- 重要指標の星 -->
+            <g fill="#f0cf8a" opacity=".75">
+              <text x="88" y="92" font-size="16">★</text>
+              <text x="290" y="44" font-size="12" opacity=".7">★</text>
+              <text x="222" y="142" font-size="20">★</text>
+              <text x="350" y="186" font-size="13" opacity=".7">★</text>
+              <text x="30" y="186" font-size="11" opacity=".6">★</text>
+            </g>
+          </svg>
+          <span class="big">📊</span>
+          <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
+        </div>
+        <div class="proj-body">
+          <span class="en">FX Tool</span>
+          <h3>Economic Calendar</h3>
+          <p>近未来ネオンテイストの経済指標カレンダー。インスタグラム風グラデーションと5段階の星評価システムで、日本時間での重要経済指標を視覚的に表示します。</p>
+        </div>
+      </a>
+
+      <a class="proj fade-in" style="--pb:#9fcf9a" href="https://hammy-the-cat.github.io/zen-omikuji/" target="_blank" rel="noopener noreferrer">
+        <span class="num">作品 参</span>
+        <div class="proj-visual">
+          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="g-zen" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#1f4a3d"/><stop offset="1" stop-color="#3c3a30"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="210" fill="url(#g-zen)"/>
+            <!-- 円相（えんそう） -->
+            <circle cx="200" cy="105" r="74" fill="none" stroke="#f3e7c9" stroke-width="9" opacity=".28"
+              stroke-linecap="round" stroke-dasharray="430 60" transform="rotate(-65 200 105)"/>
+            <!-- 砂紋 -->
+            <g stroke="#f3e7c9" opacity=".10" fill="none" stroke-width="1.4">
+              <path d="M-10 178 Q100 162 200 178 T410 178"/>
+              <path d="M-10 194 Q100 180 200 194 T410 194"/>
+            </g>
+          </svg>
+          <span class="big"><span class="zen">禅</span></span>
+          <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
+        </div>
+        <div class="proj-body">
+          <span class="en">Web App</span>
+          <h3>Zen Omikuji</h3>
+          <p>静かな和の雰囲気で今日の運勢を引ける、おみくじアプリです。シンプルな操作で気軽に楽しめる小さなWeb体験です。</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <span class="tate fade-in">連絡</span>
+    <h2 class="fade-in">Let's <em>Connect</em></h2>
+    <p class="msg fade-in">Thanks for visiting my portfolio! I'm always excited to discuss new opportunities and collaborate on interesting projects.</p>
+    <p class="msg-jp fade-in">ポートフォリオをご覧いただき、ありがとうございます！<br>一緒にバイブコーディングを楽しみましょう❣💻</p>
+
+    <div class="contact-grid fade-in">
+      <a class="c-card c-x" href="https://x.com/Hammy_the_cat" target="_blank" rel="noopener noreferrer">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </span>
+        <h3>Follow me on X</h3>
+        <p>@Hammy_the_cat</p>
+        <span class="go" aria-hidden="true">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.6"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg>
+        </span>
+      </a>
+      <a class="c-card c-substack" href="https://substack.com/@hammythecat" target="_blank" rel="noopener noreferrer">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+        </span>
+        <h3>Substack</h3>
+        <p>@hammythecat</p>
+        <span class="go" aria-hidden="true">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.6"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="cta-row fade-in">
+      <a class="cta" href="https://x.com/Hammy_the_cat" target="_blank" rel="noopener noreferrer">Follow on X 🐾</a>
+      <a class="cta substack" href="https://substack.com/@hammythecat" target="_blank" rel="noopener noreferrer">Subscribe on Substack 📮</a>
+    </div>
+
+    <footer class="fade-in">
+      <p><span class="paw">🐾</span> © Hammy The Cat — Built with HTML, CSS &amp; JavaScript.</p>
+    </footer>
+  </div>
+</section>
+
+<div id="fireflies" aria-hidden="true"></div>
+
+<script>
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- fireflies — ページ全体をゆっくり舞う光 ---------- */
+(() => {
+  if (reduceMotion) return;
+  const box = document.getElementById('fireflies');
+  const n = 12;
+  for (let i = 0; i < n; i++) {
+    const f = document.createElement('div');
+    f.className = 'fly';
+    const size = Math.random() * 2.4 + 1.8;            // 1.8〜4.2px
+    f.style.width = f.style.height = size.toFixed(1) + 'px';
+    f.style.left = (Math.random() * 96 + 2) + '%';
+    f.style.setProperty('--d', (Math.random() * 16 + 20).toFixed(1) + 's');   // 上昇 20〜36s
+    f.style.setProperty('--s', (Math.random() * 4 + 3.5).toFixed(1) + 's');   // 揺れ
+    f.style.setProperty('--o', (Math.random() * .3 + .35).toFixed(2));        // 明るさ
+    f.style.setProperty('--delay', (-Math.random() * 30).toFixed(1) + 's');   // 途中から開始
+    box.appendChild(f);
+  }
+})();
+
+/* ---------- starry sky ---------- */
+(() => {
+  const sky = document.getElementById('sky');
+  const n = 70;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 1;
+    s.style.width = s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.setProperty('--tw', (Math.random() * 4 + 2.5) + 's');
+    s.style.animationDelay = (Math.random() * 5) + 's';
+    sky.appendChild(s);
+  }
+})();
+
+/* ---------- cat eyes follow the cursor ---------- */
+(() => {
+  if (reduceMotion) return;
+  const pupils = document.querySelectorAll('.cat .pupil');
+  const stage = document.querySelector('.moon-stage');
+  if (!stage) return;
+  window.addEventListener('mousemove', (e) => {
+    const r = stage.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / (window.innerWidth / 2)));
+    const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / (window.innerHeight / 2)));
+    pupils.forEach(p => { p.style.transform = `translate(${dx * 3.2}px, ${dy * 2.4}px)`; });
+  }, { passive: true });
+})();
+
+/* ---------- scroll reveal ---------- */
+(() => {
+  const els = document.querySelectorAll('.fade-in');
+  if (reduceMotion) { els.forEach(el => el.classList.add('show')); return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('show'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => io.observe(el));
+  // hero plays immediately
+  document.querySelectorAll('.hero .fade-in').forEach((el, i) => {
+    setTimeout(() => el.classList.add('show'), 250 + i * 180);
+  });
+})();
+
+/* ---------- cat speech bubble for interests ---------- */
+(() => {
+  const bubble = document.getElementById('bubble');
+  const idle = bubble.innerHTML;
+  document.querySelectorAll('.int-card').forEach(card => {
+    const show = () => {
+      bubble.innerHTML = card.dataset.tooltip;
+      bubble.style.setProperty('--bb', card.dataset.color);
+      bubble.classList.add('active');
+    };
+    const hide = () => {
+      bubble.classList.remove('active');
+      bubble.innerHTML = idle;
+    };
+    card.addEventListener('mouseenter', show);
+    card.addEventListener('focus', show);
+    card.addEventListener('mouseleave', hide);
+    card.addEventListener('blur', hide);
+  });
+})();
+</script>
 </body>
 </html>
