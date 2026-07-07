@@ -74,8 +74,10 @@ h2 em{font-style:normal;color:var(--gold)}
   min-height:100svh;display:flex;align-items:center;justify-content:center;
   padding:4rem 1.5rem 6rem;
   background:
-    radial-gradient(1200px 700px at 50% -10%, #1d2750 0%, transparent 60%),
+    radial-gradient(1200px 700px at 50% -10%, rgba(29,39,80,.75) 0%, transparent 60%),
     radial-gradient(900px 600px at 85% 90%, rgba(225,145,164,.07) 0%, transparent 55%),
+    linear-gradient(rgba(11,14,29,.35), rgba(11,14,29,.75) 55%, var(--ink) 100%),
+    url('assets/img/haze-clouds.png') center 30%/cover no-repeat,
     var(--ink);
 }
 #sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
@@ -155,7 +157,9 @@ h2 em{font-style:normal;color:var(--gold)}
 .moon-stage{position:relative;width:min(330px,72vw);margin:0 auto 2.6rem}
 .moon{
   width:100%;aspect-ratio:1;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%, #fdf4dd 0%, var(--moon) 45%, #d8c193 100%);
+  background:
+    radial-gradient(circle at 38% 32%, rgba(253,244,221,.4), transparent 60%),
+    url('assets/img/moon-full.png') center/cover no-repeat;
   box-shadow:
     0 0 60px rgba(243,231,201,.25),
     0 0 160px rgba(243,231,201,.12);
@@ -360,6 +364,7 @@ h2 em{font-style:normal;color:var(--gold)}
 }
 .proj-visual .scene{
   position:absolute;inset:0;width:100%;height:100%;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
   transition:transform .9s cubic-bezier(.2,.8,.2,1);
 }
 .proj:hover .proj-visual .scene{transform:scale(1.07)}
@@ -639,30 +644,7 @@ footer .paw{color:var(--gold)}
       <a class="proj fade-in" style="--pb:#8e9bf0" href="https://hammy-the-cat.github.io/fx-margin-calculator/" target="_blank" rel="noopener noreferrer">
         <span class="num">作品 壱</span>
         <div class="proj-visual">
-          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-fx" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#222f63"/><stop offset="1" stop-color="#3a2a6e"/>
-              </linearGradient>
-            </defs>
-            <rect width="400" height="210" fill="url(#g-fx)"/>
-            <!-- ローソク足 -->
-            <g opacity=".32" stroke-linecap="round">
-              <line x1="60" y1="40" x2="60" y2="180" stroke="#8e9bf0" stroke-width="2"/>
-              <rect x="52" y="80" width="16" height="56" rx="3" fill="#8e9bf0"/>
-              <line x1="120" y1="60" x2="120" y2="190" stroke="#6fd3c3" stroke-width="2"/>
-              <rect x="112" y="96" width="16" height="64" rx="3" fill="#6fd3c3"/>
-              <line x1="180" y1="30" x2="180" y2="150" stroke="#8e9bf0" stroke-width="2"/>
-              <rect x="172" y="52" width="16" height="60" rx="3" fill="#8e9bf0"/>
-              <line x1="240" y1="55" x2="240" y2="175" stroke="#6fd3c3" stroke-width="2"/>
-              <rect x="232" y="84" width="16" height="58" rx="3" fill="#6fd3c3"/>
-              <line x1="300" y1="20" x2="300" y2="140" stroke="#8e9bf0" stroke-width="2"/>
-              <rect x="292" y="38" width="16" height="62" rx="3" fill="#8e9bf0"/>
-              <line x1="356" y1="46" x2="356" y2="160" stroke="#6fd3c3" stroke-width="2"/>
-              <rect x="348" y="66" width="16" height="56" rx="3" fill="#6fd3c3"/>
-            </g>
-            <path d="M20 160 C90 120 140 150 200 100 S330 60 390 36" fill="none" stroke="#f3e7c9" stroke-width="2" stroke-dasharray="5 7" opacity=".5"/>
-          </svg>
+          <div class="scene" style="background-image:url('assets/img/card-fx.png')"></div>
           <span class="big">💱</span>
           <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
         </div>
@@ -676,28 +658,7 @@ footer .paw{color:var(--gold)}
       <a class="proj fade-in" style="--pb:#ef9d7c" href="https://hammy-the-cat.github.io/economic-calendar/economic-calendar.html" target="_blank" rel="noopener noreferrer">
         <span class="num">作品 弐</span>
         <div class="proj-visual">
-          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-cal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#6e2a4a"/><stop offset="1" stop-color="#7a4322"/>
-              </linearGradient>
-            </defs>
-            <rect width="400" height="210" fill="url(#g-cal)"/>
-            <!-- カレンダーの罫線 -->
-            <g stroke="#f3e7c9" opacity=".18" stroke-width="1">
-              <line x1="0" y1="55" x2="400" y2="55"/><line x1="0" y1="105" x2="400" y2="105"/><line x1="0" y1="155" x2="400" y2="155"/>
-              <line x1="66" y1="0" x2="66" y2="210"/><line x1="133" y1="0" x2="133" y2="210"/><line x1="200" y1="0" x2="200" y2="210"/>
-              <line x1="266" y1="0" x2="266" y2="210"/><line x1="333" y1="0" x2="333" y2="210"/>
-            </g>
-            <!-- 重要指標の星 -->
-            <g fill="#f0cf8a" opacity=".75">
-              <text x="88" y="92" font-size="16">★</text>
-              <text x="290" y="44" font-size="12" opacity=".7">★</text>
-              <text x="222" y="142" font-size="20">★</text>
-              <text x="350" y="186" font-size="13" opacity=".7">★</text>
-              <text x="30" y="186" font-size="11" opacity=".6">★</text>
-            </g>
-          </svg>
+          <div class="scene" style="background-image:url('assets/img/card-calendar.png')"></div>
           <span class="big">📊</span>
           <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
         </div>
@@ -711,22 +672,7 @@ footer .paw{color:var(--gold)}
       <a class="proj fade-in" style="--pb:#9fcf9a" href="https://hammy-the-cat.github.io/zen-omikuji/" target="_blank" rel="noopener noreferrer">
         <span class="num">作品 参</span>
         <div class="proj-visual">
-          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-zen" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#1f4a3d"/><stop offset="1" stop-color="#3c3a30"/>
-              </linearGradient>
-            </defs>
-            <rect width="400" height="210" fill="url(#g-zen)"/>
-            <!-- 円相（えんそう） -->
-            <circle cx="200" cy="105" r="74" fill="none" stroke="#f3e7c9" stroke-width="9" opacity=".28"
-              stroke-linecap="round" stroke-dasharray="430 60" transform="rotate(-65 200 105)"/>
-            <!-- 砂紋 -->
-            <g stroke="#f3e7c9" opacity=".10" fill="none" stroke-width="1.4">
-              <path d="M-10 178 Q100 162 200 178 T410 178"/>
-              <path d="M-10 194 Q100 180 200 194 T410 194"/>
-            </g>
-          </svg>
+          <div class="scene" style="background-image:url('assets/img/card-zen.png')"></div>
           <span class="big"><span class="zen">禅</span></span>
           <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
         </div>
@@ -740,31 +686,7 @@ footer .paw{color:var(--gold)}
       <a class="proj fade-in" style="--pb:#e8a15c" href="https://hammy-the-cat.github.io/bento-navi/" target="_blank" rel="noopener noreferrer">
         <span class="num">作品 肆</span>
         <div class="proj-visual">
-          <svg class="scene" viewBox="0 0 400 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="g-bento" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#5a2e22"/><stop offset="1" stop-color="#7a4426"/>
-              </linearGradient>
-            </defs>
-            <rect width="400" height="210" fill="url(#g-bento)"/>
-            <!-- 遠征ルート -->
-            <path d="M20 170 C90 150 130 190 190 150 S300 90 385 60" fill="none" stroke="#f3e7c9" stroke-width="2" stroke-dasharray="6 8" opacity=".4"/>
-            <!-- 現在地ピン -->
-            <g transform="translate(58,140)" opacity=".85">
-              <path d="M0 0 C-13 0 -22 9 -22 21 C-22 38 0 58 0 58 C0 58 22 38 22 21 C22 9 13 0 0 0Z" fill="#f3e7c9"/>
-              <circle cx="0" cy="21" r="8" fill="#7a4426"/>
-            </g>
-            <!-- 目的地ピン -->
-            <g transform="translate(330,58)" opacity=".85">
-              <path d="M0 0 C-11 0 -19 7.5 -19 17.5 C-19 31 0 48 0 48 C0 48 19 31 19 17.5 C19 7.5 11 0 0 0Z" fill="#e8a15c"/>
-              <circle cx="0" cy="17.5" r="6.5" fill="#5a2e22"/>
-            </g>
-            <!-- 星（おすすめ店） -->
-            <g fill="#f0cf8a" opacity=".7">
-              <text x="230" y="128" font-size="14">★</text>
-              <text x="150" y="70" font-size="11" opacity=".6">★</text>
-            </g>
-          </svg>
+          <div class="scene" style="background-image:url('assets/img/card-bento.png')"></div>
           <span class="big">🍱</span>
           <span class="view">View<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></svg></span>
         </div>
