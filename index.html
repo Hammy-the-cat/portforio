@@ -188,7 +188,7 @@ h2 em{font-style:normal;color:var(--gold)}
    ABOUT
 ==================================================== */
 .about{background:linear-gradient(var(--ink), var(--indigo) 30%, var(--indigo))}
-.about-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:4.5rem;align-items:start}
+.about-grid{max-width:720px}
 
 /* round avatar */
 .avatar-row{display:flex;align-items:center;gap:1.4rem;margin-bottom:2rem}
@@ -221,85 +221,6 @@ h2 em{font-style:normal;color:var(--gold)}
   font-family:var(--display);font-size:2.4em;color:var(--gold);
   float:left;line-height:1;padding-right:.12em;
 }
-
-/* interests */
-.interests h3{
-  font-family:var(--display);font-size:1.35rem;color:var(--moon);
-  letter-spacing:.1em;margin-bottom:1.6rem;
-}
-.int-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
-.int-card{
-  position:relative;cursor:default;isolation:isolate;
-  border-radius:16px;padding:1.7rem 1.2rem 1.5rem;text-align:center;
-  background:
-    linear-gradient(160deg, rgba(255,255,255,.045), transparent 45%),
-    radial-gradient(120% 90% at 50% 115%, var(--c,var(--gold-soft)), transparent 60%),
-    var(--indigo-2);
-  border:1px solid var(--line);
-  overflow:hidden;
-  transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .5s,box-shadow .5s;
-}
-/* 透かしの漢字 */
-.int-card::after{
-  content:attr(data-kanji);
-  position:absolute;right:-8px;bottom:-26px;z-index:-1;
-  font-family:var(--display);font-weight:800;font-size:6rem;line-height:1;
-  color:var(--b,var(--gold));opacity:.07;
-  transition:opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1);
-}
-/* 光のスイープ */
-.int-card::before{
-  content:"";position:absolute;top:0;bottom:0;left:-80%;width:55%;
-  background:linear-gradient(105deg, transparent, rgba(255,255,255,.10), transparent);
-  transform:skewX(-18deg);transition:left .8s ease;pointer-events:none;
-}
-.int-card:hover,.int-card:focus-visible{
-  transform:translateY(-6px);
-  border-color:var(--b,var(--gold));
-  box-shadow:0 18px 40px rgba(0,0,0,.45), 0 0 0 1px var(--b,var(--gold)) inset, 0 0 28px -8px var(--b,var(--gold));
-}
-.int-card:hover::before{left:130%}
-.int-card:hover::after{opacity:.14;transform:translateY(-6px) rotate(-4deg)}
-/* アイコンの光るオーブ */
-.int-card .orb{
-  width:64px;height:64px;margin:0 auto .85rem;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.10), rgba(255,255,255,.02));
-  border:1px solid var(--line);
-  box-shadow:0 0 22px -6px var(--b,var(--gold)) inset;
-  transition:transform .5s cubic-bezier(.2,.8,.2,1), border-color .5s, box-shadow .5s;
-}
-.int-card:hover .orb{
-  transform:scale(1.1) rotate(-5deg);
-  border-color:var(--b,var(--gold));
-  box-shadow:0 0 26px -4px var(--b,var(--gold)) inset, 0 0 22px -6px var(--b,var(--gold));
-}
-.int-card .ic{font-size:1.9rem;line-height:1;display:block;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4))}
-.int-card h4{font-family:var(--display);font-size:1.08rem;color:var(--moon);letter-spacing:.06em;font-weight:600;margin-bottom:.15rem}
-.int-card small{font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;color:var(--text-dim);text-transform:uppercase}
-.int-card .bar{
-  width:0;height:2px;margin:.7rem auto 0;border-radius:2px;
-  background:linear-gradient(90deg, transparent, var(--b,var(--gold)), transparent);
-  transition:width .5s ease;
-}
-.int-card:hover .bar,.int-card:focus-visible .bar{width:64%}
-
-/* speech bubble tooltip area */
-.bubble-row{display:flex;align-items:flex-end;gap:.8rem;margin-top:1.4rem;min-height:96px}
-.bubble-cat{font-size:1.9rem;line-height:1;transform:scaleX(-1);filter:grayscale(.2)}
-.bubble{
-  flex:1;position:relative;
-  background:var(--indigo-2);border:1px solid var(--line);border-radius:14px;
-  padding:.95rem 1.2rem;font-size:.95rem;color:var(--text-dim);
-  transition:border-color .35s,color .35s,background .35s;
-}
-.bubble::before{
-  content:"";position:absolute;left:-7px;bottom:14px;width:12px;height:12px;
-  background:inherit;border-left:1px solid var(--line);border-bottom:1px solid var(--line);
-  transform:rotate(45deg);transition:border-color .35s;
-}
-.bubble.active{color:var(--moon);border-color:var(--bb,var(--gold))}
-.bubble.active::before{border-color:var(--bb,var(--gold))}
 
 /* ====================================================
    APPS — iOSアプリ ショーケース
@@ -616,7 +537,6 @@ footer .paw{color:var(--gold)}
 @media (max-width:980px){
   .tate{position:static;writing-mode:horizontal-tb;letter-spacing:.4em;display:inline-block;margin-bottom:1rem}
   .tate::after{display:none}
-  .about-grid{grid-template-columns:1fr;gap:3.5rem}
   .proj-grid{grid-template-columns:1fr 1fr}
   .app-block{grid-template-columns:1fr;gap:2.6rem}
   .app-block.rev .app-info{order:1}
@@ -626,7 +546,6 @@ footer .paw{color:var(--gold)}
   section{padding:5rem 1.25rem}
   .proj-grid{grid-template-columns:1fr}
   .contact-grid{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}
-  .int-grid{grid-template-columns:1fr 1fr}
 }
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){
@@ -684,44 +603,6 @@ footer .paw{color:var(--gold)}
         <p>まだまだ寄り道の多い野良猫ですが、作ったものや学んだことはXとSubstackで発信中。同じようにものづくりを楽しむ方と、ゆるくつながれたらうれしいです🐾</p>
       </div>
 
-      <div class="interests fade-in">
-        <h3>Interests</h3>
-        <div class="int-grid">
-          <div class="int-card" tabindex="0" data-kanji="技" style="--b:#a98ae0;--c:rgba(151,113,219,.16)"
-               data-tooltip="駆け出しのバイブコーダー。<br>これからClaude Codeと仲良くなりたい💻" data-color="#a98ae0">
-            <div class="orb"><span class="ic">💻</span></div>
-            <h4>Vibe coding</h4>
-            <small>code</small>
-            <div class="bar"></div>
-          </div>
-          <div class="int-card" tabindex="0" data-kanji="猫" style="--b:#e2a35a;--c:rgba(226,163,90,.16)"
-               data-tooltip="無類のネコ好き。セツナさん大好き。<br>LLACもお迎え中🐈" data-color="#e2a35a">
-            <div class="orb"><span class="ic">🐱</span></div>
-            <h4>The cat</h4>
-            <small>neko</small>
-            <div class="bar"></div>
-          </div>
-          <div class="int-card" tabindex="0" data-kanji="九" style="--b:#7ccf9a;--c:rgba(124,207,154,.16)"
-               data-tooltip="九州在住の野良猫。<br>豚骨ラーメンをこよなく愛してる🍜" data-color="#7ccf9a">
-            <div class="orb"><span class="ic">🏔️</span></div>
-            <h4>Kyushu</h4>
-            <small>home</small>
-            <div class="bar"></div>
-          </div>
-          <div class="int-card" tabindex="0" data-kanji="遊" style="--b:#6fb6e8;--c:rgba(111,182,232,.16)"
-               data-tooltip="ゲームも大好き。<br>気づいたら夜が明けてる🎮" data-color="#6fb6e8">
-            <div class="orb"><span class="ic">🎮</span></div>
-            <h4>Game</h4>
-            <small>play</small>
-            <div class="bar"></div>
-          </div>
-        </div>
-
-        <div class="bubble-row">
-          <span class="bubble-cat" aria-hidden="true">🐈</span>
-          <div class="bubble" id="bubble" aria-live="polite">カードにマウスを乗せると、猫がしゃべります。</div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -733,12 +614,6 @@ footer .paw{color:var(--gold)}
       <div class="brand-rule" aria-hidden="true"><span class="gem">✦</span></div>
       <p class="brand-title">MonoKit — One App. One Purpose.</p>
       <p class="brand-sub">Small, focused apps for needs too specific for big software.</p>
-    </div>
-
-    <div class="sec-head fade-in">
-      <span class="tate">アプリ</span>
-      <span class="sec-en">MonoKit — iOS Apps</span>
-      <h2>夜なべで作った、<em>ホンモノのアプリ</em>。</h2>
     </div>
 
     <!-- Pitch Chart -->
@@ -991,26 +866,6 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   });
 })();
 
-/* ---------- cat speech bubble for interests ---------- */
-(() => {
-  const bubble = document.getElementById('bubble');
-  const idle = bubble.innerHTML;
-  document.querySelectorAll('.int-card').forEach(card => {
-    const show = () => {
-      bubble.innerHTML = card.dataset.tooltip;
-      bubble.style.setProperty('--bb', card.dataset.color);
-      bubble.classList.add('active');
-    };
-    const hide = () => {
-      bubble.classList.remove('active');
-      bubble.innerHTML = idle;
-    };
-    card.addEventListener('mouseenter', show);
-    card.addEventListener('focus', show);
-    card.addEventListener('mouseleave', hide);
-    card.addEventListener('blur', hide);
-  });
-})();
 </script>
 </body>
 </html>
