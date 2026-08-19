@@ -344,17 +344,6 @@ h2 em{font-style:normal;color:var(--gold)}
 .phone img{width:100%;border-radius:22px;display:block}
 .phone.tilt-l{transform:rotate(-4.5deg) translateY(14px)}
 .phone.tilt-r{transform:rotate(3.5deg) translateY(-6px)}
-/* 写真ビジュアル */
-.app-photo{
-  position:relative;border-radius:24px;overflow:hidden;
-  border:1px solid var(--line);
-  box-shadow:0 26px 60px rgba(0,0,0,.55), 0 0 44px -16px var(--ab,var(--gold));
-}
-.app-photo img{width:100%;display:block}
-.app-photo::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(rgba(11,14,29,0) 55%, rgba(11,14,29,.55));
-}
 
 /* ====================================================
    PROJECTS（お遊びアプリ）
@@ -706,7 +695,10 @@ footer .paw{color:var(--gold)}
         <span class="cta-note">iOS版はまもなくApp Storeへ。</span>
       </div>
       <div class="app-visual">
-        <div class="app-photo"><img src="assets/img/card-bento.png" alt="夜のテーブルに置かれた湯気の立つお弁当の写真" loading="lazy"></div>
+        <div class="phone-row">
+          <div class="phone tilt-l"><img src="assets/img/bn-shot-map.jpg" alt="べんとうナビ 地図画面 — 藤崎台県営野球場周辺のコンビニ・スーパー・弁当店を表示" loading="lazy"></div>
+          <div class="phone tilt-r"><img src="assets/img/bn-shot-articles.png" alt="べんとうナビ 記事一覧 — 遠征の食事に役立つお役立ち記事" loading="lazy"></div>
+        </div>
       </div>
     </div>
   </div>
