@@ -41,6 +41,12 @@ a{color:inherit}
 .fade-in{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
 .fade-in.show{opacity:1;transform:none}
 
+/* ---------- auto-fit text（幅に収まるまで縮小） ---------- */
+[data-fit]{white-space:nowrap}
+[data-fit].fit-wrap{white-space:normal}
+.app-head>div{min-width:0;flex:1}
+h2,.brand-sub{text-wrap:balance}
+
 /* ---------- language toggle ---------- */
 .lang-toggle{
   position:fixed;top:1.2rem;right:1.3rem;z-index:20;
@@ -576,6 +582,7 @@ footer .paw{color:var(--gold)}
 }
 @media (max-width:640px){
   section{padding:5rem 1.25rem}
+  .app-tagline{letter-spacing:.14em}
   .proj-grid{grid-template-columns:1fr}
   .contact-grid{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}
 }
@@ -601,7 +608,7 @@ footer .paw{color:var(--gold)}
   </div>
 
   <div class="hero-inner">
-    <h1 class="fade-in">Hammy The Cat</h1>
+    <h1 class="fade-in" data-fit="30">Hammy The Cat</h1>
     <span class="romaji fade-in">Stray Vibecoder</span>
     <p class="tagline fade-in" data-en="A stray cat <strong>crafting iPhone apps</strong> from the night side of Kyushu, Japan.">九州の夜から、<strong>iPhoneアプリをつくる野良猫</strong>です。</p>
   </div>
@@ -646,7 +653,7 @@ footer .paw{color:var(--gold)}
   <div class="wrap">
     <div class="brand-lockup fade-in">
       <div class="brand-rule" aria-hidden="true"><span class="gem">✦</span></div>
-      <p class="brand-title">MonoKit — One App. One Purpose.</p>
+      <p class="brand-title" data-fit="16">MonoKit — One App. One Purpose.</p>
       <p class="brand-sub">Small, focused apps for needs too specific for big software.</p>
     </div>
   </div>
@@ -662,8 +669,8 @@ footer .paw{color:var(--gold)}
         <div class="app-head">
           <div class="app-icon"><img src="assets/img/pc-icon.png" alt="Pitch Chart アプリアイコン — スコアをつける女子マネージャーのイラスト"></div>
           <div>
-            <h3 class="app-name">Pitch Chart</h3>
-            <span class="app-tagline">Pitching Record &amp; Analysis</span>
+            <h3 class="app-name" data-fit="21">Pitch Chart</h3>
+            <span class="app-tagline" data-fit="8">Pitching Record &amp; Analysis</span>
           </div>
         </div>
         <div class="badges">
@@ -729,8 +736,8 @@ footer .paw{color:var(--gold)}
             </svg>
           </div>
           <div>
-            <h3 class="app-name">べんとうナビ</h3>
-            <span class="app-tagline">Bento Finder for Away Games</span>
+            <h3 class="app-name" data-fit="21">べんとうナビ</h3>
+            <span class="app-tagline" data-fit="8">Bento Finder for Away Games</span>
           </div>
         </div>
         <div class="badges">
@@ -765,8 +772,8 @@ footer .paw{color:var(--gold)}
         <div class="app-head">
           <div class="app-icon"><img src="assets/img/fh-icon.png" alt="Field Hockey Stats アプリアイコン — 緑のピッチにスティックとボール"></div>
           <div>
-            <h3 class="app-name">Field Hockey Stats</h3>
-            <span class="app-tagline">Fastest Field Hockey Stat Tracker</span>
+            <h3 class="app-name" data-fit="21">Field Hockey Stats</h3>
+            <span class="app-tagline" data-fit="8">Fastest Field Hockey Stat Tracker</span>
           </div>
         </div>
         <div class="badges">
@@ -940,6 +947,34 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   }, { passive: true });
 })();
 
+/* ---------- auto-fit text: 幅に収まるまで縮小、無理なら折り返しに戻す ---------- */
+(() => {
+  const els = document.querySelectorAll('[data-fit]');
+  if (!els.length) return;
+  const fit = () => {
+    els.forEach(el => {
+      el.style.fontSize = '';
+      el.classList.remove('fit-wrap');
+      const min = parseFloat(el.dataset.fit) || 12;
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      let guard = 60;
+      while (el.scrollWidth > el.clientWidth + 1 && size - 0.5 >= min && guard--) {
+        size -= 0.5;
+        el.style.fontSize = size + 'px';
+      }
+      // 最小サイズでも収まらない場合は通常の折り返しへ
+      if (el.scrollWidth > el.clientWidth + 1) {
+        el.style.fontSize = '';
+        el.classList.add('fit-wrap');
+      }
+    });
+  };
+  window.addEventListener('resize', fit);
+  document.addEventListener('langchange', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit();
+})();
+
 /* ---------- horizontal scroll showcase (PCのみ) ---------- */
 (() => {
   const wrap = document.getElementById('appsHscroll');
@@ -990,6 +1025,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     document.documentElement.lang = lang;
     btn.textContent = lang === 'en' ? '日本語' : 'EN';
     try { localStorage.setItem('lang', lang); } catch (e) {}
+    document.dispatchEvent(new CustomEvent('langchange'));
   };
   let lang = 'ja';
   try { lang = localStorage.getItem('lang') || 'ja'; } catch (e) {}
