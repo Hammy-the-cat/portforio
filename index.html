@@ -982,16 +982,34 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   const track = wrap.querySelector('.hscroll-track');
   const dots = [...wrap.querySelectorAll('.hdot')];
   const mq = window.matchMedia('(min-width: 981px) and (min-height: 640px)');
-  let active = false, travel = 0;
+  const SCROLL_PER_SLIDE = 1.8;   // 1スライドの横移動に要する縦スクロール量（画面幅比）
+  const HOLD = 0.22;              // 各スライドで静止する区間の割合（前後それぞれ）
+  const EASE = 0.11;              // 追従の慣性（小さいほど滑らか・遅れ大）
+  let active = false, travel = 0, target = 0, current = 0, raf = 0;
+  const n = dots.length;
 
+  const smooth = t => t * t * (3 - 2 * t);
+  const slidePos = p => {                 // 進捗0〜1 → スライド位置0〜n-1（静止区間つき）
+    const u = p * (n - 1);
+    const i = Math.min(n - 2, Math.floor(u));
+    const f = Math.min(1, Math.max(0, ((u - i) - HOLD) / (1 - 2 * HOLD)));
+    return i + smooth(f);
+  };
+  const render = () => {
+    current += (target - current) * EASE;
+    if (Math.abs(target - current) < 0.3) current = target;
+    track.style.transform = `translate3d(${-current}px,0,0)`;
+    const idx = Math.round(current / (travel / (n - 1)));
+    dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+    raf = current === target ? 0 : requestAnimationFrame(render);
+  };
   const onScroll = () => {
     if (!active) return;
     const total = wrap.offsetHeight - window.innerHeight;
     if (total <= 0) return;
     const p = Math.min(1, Math.max(0, -wrap.getBoundingClientRect().top / total));
-    track.style.transform = `translate3d(${-p * travel}px,0,0)`;
-    const idx = Math.min(dots.length - 1, Math.round(p * (dots.length - 1)));
-    dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+    target = slidePos(p) * (travel / (n - 1));
+    if (!raf) raf = requestAnimationFrame(render);
   };
   const layout = () => {
     if (reduceMotion || !mq.matches) {
@@ -1004,7 +1022,7 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     active = true;
     wrap.classList.add('active');
     travel = track.scrollWidth - window.innerWidth;
-    wrap.style.height = (window.innerHeight + travel) + 'px';
+    wrap.style.height = (window.innerHeight + travel * SCROLL_PER_SLIDE) + 'px';
     // スライド内はビューポート交差が遅れるため即時表示にする
     wrap.querySelectorAll('.fade-in').forEach(el => el.classList.add('show'));
     onScroll();
