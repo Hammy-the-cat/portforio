@@ -1,0 +1,633 @@
+:root{
+  --ink:#0b0e1d;           /* 夜 — base night */
+  --indigo:#141a33;        /* 藍 — surface */
+  --indigo-2:#1b2347;      /* raised surface */
+  --line:#2a3358;          /* hairline */
+  --moon:#f3e7c9;          /* 月 — warm cream */
+  --gold:#e2b35a;          /* 提灯 — lantern gold */
+  --gold-soft:rgba(226,179,90,.16);
+  --sakura:#e191a4;        /* 桜 — soft accent */
+  --teal:#6fd3c3;          /* チャート — fx accent */
+  --text:#e9e6dd;
+  --text-dim:#9aa0b8;
+  --display:'Shippori Mincho',serif;
+  --body:'Zen Kaku Gothic New',sans-serif;
+  --mono:'M PLUS 1 Code',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body);
+  background:var(--ink);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.9;
+}
+::selection{background:var(--gold);color:var(--ink)}
+a{color:inherit}
+
+/* ---------- reveal ---------- */
+.fade-in{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform .9s ease}
+.fade-in.show{opacity:1;transform:none}
+
+/* ---------- auto-fit text（幅に収まるまで縮小） ---------- */
+[data-fit]{white-space:nowrap}
+[data-fit].fit-wrap{white-space:normal}
+.app-head>div:not(.app-icon){min-width:0;flex:1}
+h2,.brand-sub{text-wrap:balance}
+
+/* ---------- language toggle ---------- */
+.lang-toggle{
+  position:fixed;top:1.2rem;right:1.3rem;z-index:20;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;
+  color:var(--moon);background:rgba(11,14,29,.55);
+  border:1px solid var(--line);border-radius:999px;
+  padding:.52rem 1.15rem;cursor:pointer;
+  backdrop-filter:blur(6px);
+  transition:border-color .3s,color .3s,box-shadow .3s;
+}
+.lang-toggle:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 18px -6px var(--gold)}
+
+/* ---------- section scaffolding ---------- */
+section{position:relative;padding:7rem 1.5rem}
+.wrap{max-width:1100px;margin:0 auto;position:relative}
+
+/* vertical kanji eyebrow */
+.tate{
+  position:absolute;left:-4.5rem;top:.4rem;
+  writing-mode:vertical-rl;
+  font-family:var(--display);font-size:1.05rem;letter-spacing:.55em;
+  color:var(--gold);opacity:.85;
+}
+.tate::after{
+  content:"";display:block;width:1px;height:64px;margin:18px auto 0;
+  background:linear-gradient(var(--gold),transparent);
+}
+.sec-head{position:relative;margin-bottom:3.5rem}
+.sec-en{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.45em;
+  text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:.9rem;
+}
+h2{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(2rem,5vw,3.1rem);letter-spacing:.04em;color:var(--moon);
+}
+h2 em{font-style:normal;color:var(--gold)}
+
+/* ====================================================
+   HERO — 九州の夜、月、猫
+==================================================== */
+.hero{
+  min-height:100svh;display:flex;align-items:flex-end;justify-content:center;
+  padding:4rem 1.5rem 7.5rem;
+  background:
+    linear-gradient(rgba(11,14,29,.02) 0%, rgba(11,14,29,.18) 50%, rgba(11,14,29,.72) 82%, var(--ink) 100%),
+    url('img/hero-night.png') center/cover no-repeat,
+    var(--ink);
+}
+#sky{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.star{
+  position:absolute;border-radius:50%;background:var(--moon);
+  animation:twinkle var(--tw,4s) ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.85}}
+
+/* ---------- 夜霧 — ゆっくり流れる薄雲 ---------- */
+.haze{
+  position:absolute;pointer-events:none;border-radius:50%;
+  filter:blur(46px);will-change:transform;
+}
+.haze.a{
+  top:10%;width:54vw;height:26vh;
+  background:radial-gradient(ellipse at center, rgba(243,231,201,.07), transparent 70%);
+  animation:drift 90s linear infinite;
+}
+.haze.b{
+  top:42%;width:44vw;height:20vh;
+  background:radial-gradient(ellipse at center, rgba(142,155,240,.06), transparent 70%);
+  animation:drift 130s linear infinite;
+  animation-delay:-60s;
+}
+@keyframes drift{
+  0%{transform:translateX(-60vw)}
+  100%{transform:translateX(110vw)}
+}
+
+/* ---------- 流れ星 ---------- */
+.shooting{
+  position:absolute;height:2px;width:130px;border-radius:2px;
+  background:linear-gradient(90deg, var(--moon), transparent);
+  opacity:0;pointer-events:none;
+  transform:rotate(-30deg);
+  animation:shoot var(--dur,11s) ease-in infinite;
+  animation-delay:var(--delay,0s);
+}
+.shooting.s1{top:14%;left:68%}
+.shooting.s2{top:30%;left:22%;--dur:15s;--delay:6s;width:100px}
+@keyframes shoot{
+  0%{opacity:0;transform:rotate(-30deg) translateX(0)}
+  2%{opacity:.95}
+  8%{opacity:0;transform:rotate(-30deg) translateX(-300px)}
+  100%{opacity:0;transform:rotate(-30deg) translateX(-300px)}
+}
+
+/* ---------- 蛍 — ページ全体を舞う光 ---------- */
+#fireflies{
+  position:fixed;inset:0;z-index:6;
+  pointer-events:none;mix-blend-mode:screen;overflow:hidden;
+}
+.fly{
+  position:absolute;bottom:-4vh;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 10px 3px rgba(226,179,90,.45);
+  opacity:0;will-change:transform;
+  animation:
+    rise var(--d,26s) linear infinite,
+    sway var(--s,5s) ease-in-out infinite alternate,
+    glow 3.4s ease-in-out infinite;
+  animation-delay:var(--delay,0s),var(--delay,0s),0s;
+}
+@keyframes rise{
+  0%{transform:translateY(0);opacity:0}
+  8%{opacity:var(--o,.55)}
+  80%{opacity:calc(var(--o,.55)*.7)}
+  100%{transform:translateY(-118vh);opacity:0}
+}
+@keyframes sway{from{margin-left:0}to{margin-left:34px}}
+@keyframes glow{0%,100%{filter:brightness(.6)}50%{filter:brightness(1.5)}}
+
+.hero-inner{position:relative;text-align:center;z-index:2}
+
+.hero h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(2.6rem,8vw,5.4rem);
+  letter-spacing:.03em;line-height:1.15;color:var(--moon);
+  text-shadow:0 4px 34px rgba(0,0,0,.75), 0 1px 8px rgba(0,0,0,.55);
+}
+.hero h1 .dot{color:var(--gold)}
+.hero .romaji{
+  font-family:var(--mono);font-size:clamp(.7rem,1.6vw,.85rem);
+  letter-spacing:.6em;color:var(--text-dim);text-transform:uppercase;
+  display:block;margin-top:1.1rem;
+}
+.hero .tagline{
+  margin-top:1.6rem;font-size:clamp(1rem,2.4vw,1.25rem);color:var(--text);
+  text-shadow:0 2px 14px rgba(0,0,0,.8);
+}
+.hero .tagline strong{
+  color:var(--gold);font-weight:700;
+  border-bottom:1px solid var(--gold-soft);padding-bottom:2px;
+}
+.scroll-cue{
+  position:absolute;bottom:2.2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.7rem;
+  color:var(--text-dim);font-family:var(--mono);font-size:.65rem;letter-spacing:.4em;
+  text-transform:uppercase;z-index:2;
+}
+.scroll-cue span{writing-mode:vertical-rl}
+.scroll-cue i{
+  width:1px;height:54px;background:linear-gradient(var(--gold),transparent);
+  display:block;animation:drip 2.2s ease-in-out infinite;
+}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ====================================================
+   ABOUT
+==================================================== */
+.about{background:linear-gradient(var(--ink), var(--indigo) 30%, var(--indigo))}
+.about-grid{max-width:720px}
+
+/* round avatar */
+.avatar-row{display:flex;align-items:center;gap:1.4rem;margin-bottom:2rem}
+.avatar{
+  position:relative;flex-shrink:0;
+  width:128px;height:128px;border-radius:50%;
+  padding:4px;
+  background:conic-gradient(from 210deg, var(--gold), #f0cf8a, var(--gold-soft), var(--gold));
+  box-shadow:0 0 36px rgba(226,179,90,.22), 0 10px 28px rgba(0,0,0,.4);
+}
+.avatar img{
+  width:100%;height:100%;border-radius:50%;
+  object-fit:cover;display:block;
+  border:3px solid var(--ink);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.avatar:hover img{transform:scale(1.06) rotate(-2deg)}
+.avatar::after{
+  content:"🐾";position:absolute;right:-4px;bottom:-2px;
+  font-size:1.2rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
+}
+.avatar-name{font-family:var(--display);color:var(--moon);font-size:1.1rem;letter-spacing:.06em}
+.avatar-name small{
+  display:block;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.32em;color:var(--text-dim);text-transform:uppercase;margin-top:.3rem;
+}
+.about p{color:var(--text);margin-bottom:1.4rem;font-size:1.02rem}
+.about p:last-child{margin-bottom:0}
+.about .lede::first-letter{
+  font-family:var(--display);font-size:2.4em;color:var(--gold);
+  float:left;line-height:1;padding-right:.12em;
+}
+
+/* ====================================================
+   APPS — iOSアプリ ショーケース
+==================================================== */
+.apps{background:var(--ink)}
+
+/* ---- MonoKit ブランドロックアップ ---- */
+.brand-lockup{
+  text-align:center;
+  margin:0 auto 4.5rem;
+  max-width:760px;
+}
+.brand-rule{
+  display:flex;align-items:center;gap:1.1rem;
+  margin-bottom:2.2rem;
+}
+.brand-rule::before,.brand-rule::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg, transparent, rgba(226,179,90,.55));
+}
+.brand-rule::after{
+  background:linear-gradient(90deg, rgba(226,179,90,.55), transparent);
+}
+.brand-rule .gem{
+  color:var(--gold);font-size:.72rem;line-height:1;
+  text-shadow:0 0 12px rgba(226,179,90,.8);
+  animation:gemPulse 3.6s ease-in-out infinite;
+}
+@keyframes gemPulse{
+  0%,100%{opacity:.55;text-shadow:0 0 6px rgba(226,179,90,.4)}
+  50%{opacity:1;text-shadow:0 0 16px rgba(226,179,90,.95)}
+}
+.brand-title{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(1.5rem,3.6vw,2.35rem);
+  letter-spacing:.06em;line-height:1.3;
+  background:linear-gradient(
+    105deg,
+    #9a7433 0%, #e2b35a 22%, #f9f0d8 38%, #e2b35a 50%,
+    #b8873f 62%, #f3e7c9 80%, #9a7433 100%
+  );
+  background-size:250% auto;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 2px 18px rgba(226,179,90,.28));
+  animation:goldSheen 7s linear infinite;
+}
+@keyframes goldSheen{
+  0%{background-position:0% center}
+  100%{background-position:-250% center}
+}
+.brand-sub{
+  margin-top:1.15rem;
+  font-family:var(--mono);
+  font-size:clamp(.72rem,1.6vw,.85rem);
+  letter-spacing:.22em;
+  color:var(--text-dim);
+}
+@media (prefers-reduced-motion:reduce){
+  .brand-title{background-position:35% center}
+}
+.app-block{
+  display:grid;grid-template-columns:1.05fr .95fr;gap:3.5rem;align-items:center;
+  padding:3.4rem 0;
+}
+.hslide+.hslide .app-block{border-top:1px solid var(--line)}
+
+/* ---- スクロール連動 横スライドショーケース（PCのみJSで有効化） ---- */
+.apps{padding-left:0;padding-right:0}
+.apps>.wrap{padding:0 1.5rem}
+.hslide{padding:0 1.5rem}
+.hscroll-dots{display:none}
+.hscroll.active .hscroll-sticky{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hscroll.active .hscroll-track{
+  display:flex;align-items:center;will-change:transform;
+}
+.hscroll.active .hslide{
+  flex:0 0 100vw;min-width:100vw;
+  display:flex;align-items:center;justify-content:center;
+}
+.hscroll.active .hslide .wrap{width:100%}
+.hscroll.active .hslide .app-block{border-top:none;padding:2rem 0}
+.hscroll.active .hscroll-dots{
+  display:flex;gap:.7rem;justify-content:center;
+  position:absolute;left:0;right:0;bottom:2.2rem;
+}
+.hdot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--line);transition:background .35s,box-shadow .35s,transform .35s;
+}
+.hdot.on{
+  background:var(--gold);transform:scale(1.25);
+  box-shadow:0 0 10px rgba(226,179,90,.8);
+}
+.app-block.rev .app-info{order:2}
+.app-block.rev .app-visual{order:1}
+.app-head{display:flex;align-items:center;gap:1.3rem;margin-bottom:1.3rem}
+.app-icon{
+  width:96px;height:96px;border-radius:24px;flex-shrink:0;overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 30px -12px var(--ab,var(--gold));
+}
+.app-icon img,.app-icon svg{width:100%;height:100%;display:block}
+.app-name{font-family:var(--display);font-weight:700;font-size:1.85rem;color:var(--moon);letter-spacing:.03em;line-height:1.2}
+.app-tagline{font-family:var(--mono);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ab,var(--gold));display:block;margin-top:.5rem}
+.badges{display:flex;flex-wrap:wrap;gap:.55rem;margin:0 0 1.5rem}
+.badge{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+  padding:.42rem .9rem;border-radius:999px;
+  border:1px solid var(--line);color:var(--text-dim);
+}
+.badge.gold{
+  color:var(--ink);font-weight:700;border:none;
+  background:linear-gradient(120deg,var(--gold),#f0cf8a);
+}
+.app-desc{color:var(--text);font-size:1rem;margin-bottom:1.5rem}
+.app-feats{list-style:none;display:grid;gap:.65rem;margin-bottom:1.9rem}
+.app-feats li{
+  position:relative;padding-left:1.5rem;
+  color:var(--text-dim);font-size:.94rem;line-height:1.7;
+}
+.app-feats li::before{
+  content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;
+  border-radius:50%;background:var(--ab,var(--gold));
+  box-shadow:0 0 8px var(--ab,var(--gold));
+}
+.app-cta{
+  display:inline-block;text-decoration:none;
+  font-family:var(--display);font-size:.98rem;letter-spacing:.1em;
+  color:var(--ink);background:linear-gradient(120deg,var(--gold),#f0cf8a);
+  padding:.85rem 2.2rem;border-radius:999px;
+  box-shadow:0 10px 28px rgba(226,179,90,.22);
+  transition:transform .4s,box-shadow .4s;
+}
+.app-cta:hover{transform:translateY(-3px);box-shadow:0 15px 38px rgba(226,179,90,.35)}
+.app-cta.ghost{
+  color:var(--text-dim);background:none;border:1px solid var(--line);
+  box-shadow:none;cursor:default;
+}
+.app-cta.ghost:hover{transform:none}
+.app-cta.outline{
+  color:var(--moon);background:none;border:1px solid var(--line);box-shadow:none;
+  margin-left:.6rem;
+}
+.app-cta.outline:hover{border-color:var(--ab,var(--gold));color:var(--ab,var(--gold))}
+
+/* ---- ポートフォリオ側: MonoKit 要約カード ---- */
+.mk-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;
+  max-width:1100px;margin:0 auto;
+}
+.mk-card{
+  display:flex;align-items:center;gap:1rem;text-decoration:none;
+  padding:1.1rem 1.2rem;border-radius:18px;
+  background:var(--indigo);border:1px solid var(--line);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .45s,box-shadow .45s;
+}
+.mk-card:hover,.mk-card:focus-visible{
+  transform:translateY(-5px);border-color:var(--ab,var(--gold));
+  box-shadow:0 18px 40px rgba(0,0,0,.45),0 0 28px -12px var(--ab,var(--gold));
+}
+.mk-card img,.mk-card svg{width:58px;height:58px;border-radius:14px;flex-shrink:0;display:block}
+.mk-card b{display:block;font-family:var(--display);font-size:1.05rem;color:var(--moon);letter-spacing:.03em;line-height:1.35}
+.mk-card small{display:block;font-size:.78rem;color:var(--text-dim);line-height:1.5;margin-top:.2rem}
+.mk-more{text-align:center;margin-top:2.8rem}
+
+/* ---- MonoKit ページ ---- */
+.mk-nav{
+  position:fixed;top:1.2rem;left:1.3rem;z-index:20;
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-decoration:none;
+  color:var(--moon);background:rgba(11,14,29,.55);
+  border:1px solid var(--line);border-radius:999px;
+  padding:.52rem 1.15rem;backdrop-filter:blur(6px);
+  transition:border-color .3s,color .3s;
+}
+.mk-nav:hover{border-color:var(--gold);color:var(--gold)}
+.mk-hero{
+  min-height:88svh;display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(900px 520px at 50% 40%, rgba(226,179,90,.13), transparent 65%),
+    radial-gradient(1200px 700px at 50% -10%, #1d2750 0%, transparent 60%),
+    var(--ink);
+}
+.mk-hero .brand-lockup{margin-bottom:0}
+.mk-hero .brand-title{font-size:clamp(1.8rem,5vw,3.4rem)}
+.mk-lead{margin-top:2rem;color:var(--text);font-size:clamp(.95rem,2.2vw,1.1rem)}
+.mk-count{
+  margin-top:1.6rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);
+}
+.cta-note{display:block;margin-top:.8rem;font-size:.78rem;color:var(--text-dim)}
+/* iPhone枠 */
+.phone-row{display:flex;gap:1.6rem;justify-content:center;align-items:center}
+.phone{
+  width:min(225px,40vw);border-radius:30px;padding:9px;flex-shrink:0;
+  background:#05070f;border:1px solid #2a3358;
+  box-shadow:0 26px 60px rgba(0,0,0,.6), 0 0 44px -16px var(--ab,var(--gold));
+}
+.phone img{width:100%;border-radius:22px;display:block}
+.phone.tilt-l{transform:rotate(-4.5deg) translateY(14px)}
+.phone.tilt-r{transform:rotate(3.5deg) translateY(-6px)}
+
+/* ====================================================
+   PROJECTS（お遊びアプリ）
+==================================================== */
+.projects{background:var(--ink)}
+.projects .lead{color:var(--text-dim);max-width:640px;margin-top:-2rem;margin-bottom:3.2rem}
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.proj{
+  position:relative;display:flex;flex-direction:column;text-decoration:none;
+  background:var(--indigo);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1),border-color .55s,box-shadow .55s;
+}
+.proj:hover,.proj:focus-visible{
+  transform:translateY(-10px);
+  border-color:var(--pb,var(--gold));
+  box-shadow:0 26px 56px rgba(0,0,0,.5), 0 0 36px -14px var(--pb,var(--gold));
+}
+/* 通し番号（壱・弐・参） */
+.proj .num{
+  position:absolute;top:.9rem;left:1.1rem;z-index:3;
+  font-family:var(--display);font-weight:700;font-size:.8rem;letter-spacing:.3em;
+  color:var(--moon);opacity:.85;
+  writing-mode:vertical-rl;
+  padding:.6rem .3rem;
+  background:rgba(11,14,29,.45);border:1px solid rgba(243,231,201,.25);
+  border-radius:999px;backdrop-filter:blur(4px);
+}
+/* ビジュアル */
+.proj-visual{
+  position:relative;height:250px;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.proj-visual .scene{
+  position:absolute;inset:0;width:100%;height:100%;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  transition:transform .9s cubic-bezier(.2,.8,.2,1);
+}
+.proj:hover .proj-visual .scene{transform:scale(1.07)}
+.proj-visual::after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(rgba(11,14,29,0) 40%, rgba(11,14,29,.72));
+}
+.proj-visual .big{
+  position:relative;z-index:2;font-size:3.6rem;
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.55));
+  transition:transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.proj:hover .proj-visual .big{transform:scale(1.14) translateY(-4px)}
+.proj-visual .zen{
+  font-family:var(--display);font-size:3.8rem;font-weight:800;color:var(--moon);
+  text-shadow:0 6px 32px rgba(0,0,0,.5);
+}
+/* 準備中カード */
+.proj.soon{cursor:default}
+.proj .soon-tag{
+  position:absolute;right:1rem;bottom:.9rem;z-index:3;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--text-dim);background:rgba(11,14,29,.6);
+  border:1px solid var(--line);
+  padding:.45rem .95rem;border-radius:999px;backdrop-filter:blur(4px);
+}
+/* 「見る」リボン — ホバーで現れる */
+.proj .view{
+  position:absolute;right:1rem;bottom:.9rem;z-index:3;
+  display:flex;align-items:center;gap:.45rem;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ink);background:linear-gradient(120deg,var(--gold),#f0cf8a);
+  padding:.45rem .95rem;border-radius:999px;
+  opacity:0;transform:translateY(8px);
+  transition:opacity .45s,transform .45s;
+}
+.proj:hover .view,.proj:focus-visible .view{opacity:1;transform:none}
+.proj .view svg{width:11px;height:11px}
+/* 本文 */
+.proj-body{padding:1.7rem 1.6rem 1.9rem;display:flex;flex-direction:column;flex:1;position:relative}
+.proj-body::before{
+  content:"";position:absolute;top:0;left:1.6rem;right:1.6rem;height:1px;
+  background:linear-gradient(90deg, var(--pb,var(--gold)), transparent 70%);
+  opacity:.45;
+}
+.proj-body .en{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--pb,var(--gold));margin-bottom:.55rem;
+}
+.proj-body h3{
+  font-family:var(--display);font-size:1.3rem;color:var(--moon);
+  letter-spacing:.04em;margin-bottom:.75rem;
+}
+.proj-body p{font-size:.92rem;color:var(--text-dim);flex:1;margin:0}
+
+/* ====================================================
+   CONTACT
+==================================================== */
+.contact{
+  background:
+    radial-gradient(800px 420px at 50% 115%, rgba(226,179,90,.10), transparent 65%),
+    linear-gradient(rgba(11,14,29,.92) 0%, rgba(11,14,29,.72) 55%, rgba(20,26,51,.88) 100%),
+    url('img/contact-night.png') center/cover no-repeat,
+    linear-gradient(var(--ink), var(--indigo));
+  text-align:center;
+}
+.contact .tate{left:50%;transform:translateX(-50%);top:-1.5rem;position:relative;display:inline-block;margin-bottom:2rem}
+.contact h2{margin-bottom:1.6rem}
+.contact .msg{color:var(--text-dim);max-width:560px;margin:0 auto 1rem}
+.contact .msg-jp{color:var(--text);max-width:560px;margin:0 auto 3.2rem}
+.contact-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:1.2rem;
+  justify-content:center;margin-bottom:3.2rem;
+}
+.c-card{
+  position:relative;display:block;text-decoration:none;text-align:center;
+  border-radius:16px;padding:1.8rem 1.4rem;overflow:hidden;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,border-color .45s;
+}
+.c-card:hover,.c-card:focus-visible{transform:translateY(-6px)}
+.c-card .logo{display:flex;justify-content:center;margin-bottom:.95rem}
+.c-card .logo svg{width:30px;height:30px}
+.c-card h3{font-family:var(--body);font-weight:700;font-size:1rem;letter-spacing:.02em;margin-bottom:.3rem}
+.c-card p{font-family:var(--mono);font-size:.78rem;transition:opacity .35s}
+.c-card .go{
+  position:absolute;top:.9rem;right:1rem;
+  opacity:0;transform:translate(-4px,4px);transition:.4s;
+}
+.c-card:hover .go{opacity:1;transform:none}
+.c-card .go svg{width:13px;height:13px}
+
+/* X — 黒背景に白 */
+.c-x{
+  background:#000;
+  border:1px solid #2f3336;
+  color:#fff;
+}
+.c-x h3{color:#fff}
+.c-x p{color:#8b98a5}
+.c-x:hover{border-color:#e7e9ea;box-shadow:0 16px 38px rgba(0,0,0,.55), 0 0 26px -10px rgba(255,255,255,.45)}
+.c-x:hover p{color:#e7e9ea}
+.c-x .logo svg,.c-x .go svg{fill:#fff;stroke:#fff}
+
+/* Substack — オレンジと白 */
+.c-substack{
+  background:#FF6719;
+  border:1px solid #ff8547;
+  color:#fff;
+}
+.c-substack::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(155deg, rgba(255,255,255,.16), transparent 55%);
+  pointer-events:none;
+}
+.c-substack h3{color:#fff}
+.c-substack p{color:rgba(255,255,255,.85)}
+.c-substack:hover{border-color:#fff;box-shadow:0 16px 38px rgba(0,0,0,.45), 0 0 30px -8px rgba(255,103,25,.8)}
+.c-substack:hover p{color:#fff}
+.c-substack .logo svg,.c-substack .go svg{fill:#fff;stroke:#fff}
+.cta-row{display:flex;justify-content:center;align-items:center;gap:1.1rem;flex-wrap:wrap}
+.cta{
+  display:inline-block;text-decoration:none;
+  font-family:var(--display);font-size:1.05rem;letter-spacing:.12em;
+  color:var(--ink);background:linear-gradient(120deg,var(--gold),#f0cf8a);
+  padding:1rem 3.2rem;border-radius:999px;
+  box-shadow:0 10px 32px rgba(226,179,90,.25);
+  transition:transform .4s,box-shadow .4s;
+}
+.cta:hover{transform:translateY(-3px);box-shadow:0 16px 42px rgba(226,179,90,.38)}
+.cta.substack{
+  color:#fff;
+  background:linear-gradient(120deg,#FF6719,#ff8a47);
+  box-shadow:0 10px 32px rgba(255,103,25,.28);
+}
+.cta.substack:hover{box-shadow:0 16px 42px rgba(255,103,25,.42)}
+footer{
+  margin-top:5rem;padding-top:2.2rem;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--text-dim);
+}
+footer .paw{color:var(--gold)}
+
+/* ====================================================
+   responsive / a11y
+==================================================== */
+@media (max-width:980px){
+  .tate{position:static;writing-mode:horizontal-tb;letter-spacing:.4em;display:inline-block;margin-bottom:1rem}
+  .tate::after{display:none}
+  .proj-grid{grid-template-columns:1fr 1fr}
+  .app-block{grid-template-columns:1fr;gap:2.6rem}
+  .app-block.rev .app-info{order:1}
+  .app-block.rev .app-visual{order:2}
+}
+@media (max-width:640px){
+  section{padding:5rem 1.25rem}
+  .app-tagline{letter-spacing:.14em}
+  .proj-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto}
+}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .fade-in{opacity:1;transform:none}
+}
