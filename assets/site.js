@@ -120,15 +120,17 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     if (!raf) raf = requestAnimationFrame(render);
   };
   const layout = () => {
-    if (reduceMotion || !mq.matches) {
+    const off = () => {
       active = false;
       wrap.classList.remove('active');
       wrap.style.height = '';
       track.style.transform = '';
-      return;
-    }
-    active = true;
+    };
+    if (reduceMotion || !mq.matches) return off();
     wrap.classList.add('active');
+    // 画面の高さに収まらないスライドがあれば、切れないよう縦積み表示に戻す
+    if (slides.some(s => s.firstElementChild.scrollHeight > window.innerHeight - 24)) return off();
+    active = true;
     travel = track.scrollWidth - window.innerWidth;
     wrap.style.height = (window.innerHeight + travel * SCROLL_PER_SLIDE) + 'px';
     // スライド内はビューポート交差が遅れるため即時表示にする
@@ -141,16 +143,20 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
     if (i < 0 || !active) return;
     const docTop = window.scrollY + wrap.getBoundingClientRect().top;
     const total = wrap.offsetHeight - window.innerHeight;
-    window.scrollTo(0, docTop + total * (i / (n - 1)));
+    // smooth指定だとブラウザのアンカースクロールと競合するため instant で上書きする
+    window.scrollTo({ top: docTop + total * (i / (n - 1)), behavior: 'instant' });
     current = target = i * (travel / (n - 1));
     track.style.transform = `translate3d(${-current}px,0,0)`;
+    dots.forEach((d, k) => d.classList.toggle('on', k === i));
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', layout);
   window.addEventListener('hashchange', jumpToHash);
   mq.addEventListener ? mq.addEventListener('change', layout) : mq.addListener(layout);
-  layout();
-  if (location.hash) requestAnimationFrame(jumpToHash);
+  const init = () => { layout(); if (location.hash) jumpToHash(); };
+  init();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(init);
+  window.addEventListener('load', init);
 })();
 
 /* ---------- language toggle (JA <-> EN) ---------- */

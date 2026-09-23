@@ -290,10 +290,11 @@ h2 em{font-style:normal;color:var(--gold)}
   .brand-title{background-position:35% center}
 }
 .app-block{
-  display:grid;grid-template-columns:1.05fr .95fr;gap:3.5rem;align-items:center;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:3.5rem;align-items:center;
   padding:3.4rem 0;
 }
-.hslide+.hslide .app-block{border-top:1px solid var(--line)}
+.hslide+.hslide .app-block,.hslide+.hslide .ds-block{border-top:1px solid var(--line)}
+.hscroll.active .hslide .ds-block{border-top:none}
 
 /* ---- スクロール連動 横スライドショーケース（PCのみJSで有効化） ---- */
 .apps{padding-left:0;padding-right:0}
@@ -414,9 +415,58 @@ h2 em{font-style:normal;color:var(--gold)}
     radial-gradient(1200px 700px at 50% -10%, #1d2750 0%, transparent 60%),
     var(--ink);
 }
-.mk-hero .brand-lockup{margin-bottom:0}
+.mk-hero .brand-lockup{margin-bottom:0;width:100%;min-width:0}
 .mk-hero .brand-title{font-size:clamp(1.8rem,5vw,3.4rem)}
 .mk-lead{margin-top:2rem;color:var(--text);font-size:clamp(.95rem,2.2vw,1.1rem)}
+/* ---- MonoKit: 現在のダウンロード状況 ---- */
+.ds-block{max-width:880px;margin:0 auto;text-align:center;padding:3rem 0}
+.ds-label{
+  font-size:.82rem;letter-spacing:.3em;color:var(--gold);margin-bottom:1rem;
+}
+.ds-headline{
+  font-family:var(--display);font-weight:700;color:var(--moon);
+  font-size:clamp(1.9rem,5vw,3.1rem);letter-spacing:.03em;line-height:1.25;
+}
+.ds-desc{max-width:36em;margin:1.3rem auto 0;color:var(--text);font-size:clamp(.95rem,2vw,1.05rem)}
+.ds-metrics{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  margin:2.6rem auto 0;max-width:720px;
+}
+.ds-metric{display:flex;flex-direction:column-reverse;align-items:center;padding:.4rem 1rem}
+.ds-metric+.ds-metric{border-left:1px solid var(--line)}
+.ds-metric dd{
+  font-family:var(--display);font-weight:800;line-height:1.1;
+  font-size:clamp(2.6rem,6vw,3.8rem);color:var(--gold);
+}
+.ds-suffix{font-size:.62em;margin-left:.04em}
+.ds-metric dt{
+  font-family:var(--mono);font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--moon);margin-top:.45rem;
+}
+.ds-note{
+  max-width:40em;margin:1.8rem auto 0;
+  font-size:.84rem;line-height:1.75;color:var(--text-dim);
+}
+.ds-countries{margin-top:1.7rem}
+.ds-countries-title{font-size:.84rem;color:var(--text-dim)}
+.ds-countries ul{
+  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem;
+  margin-top:.7rem;
+}
+.ds-countries li{
+  font-size:.8rem;color:var(--text);
+  border:1px solid var(--line);border-radius:999px;padding:.22rem .8rem;
+}
+.ds-closing{
+  margin-top:2.4rem;font-family:var(--display);color:var(--moon);
+  font-size:clamp(1rem,2.4vw,1.2rem);letter-spacing:.04em;line-height:1.9;
+}
+@media (max-width:640px){
+  .ds-block{padding:2.5rem 0}
+  .ds-metrics{grid-template-columns:1fr;max-width:260px;gap:0}
+  .ds-metric{padding:1rem 0}
+  .ds-metric+.ds-metric{border-left:none;border-top:1px solid var(--line)}
+}
 .mk-count{
   margin-top:1.6rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;
   text-transform:uppercase;color:var(--gold);
@@ -615,7 +665,7 @@ footer .paw{color:var(--gold)}
   .tate{position:static;writing-mode:horizontal-tb;letter-spacing:.4em;display:inline-block;margin-bottom:1rem}
   .tate::after{display:none}
   .proj-grid{grid-template-columns:1fr 1fr}
-  .app-block{grid-template-columns:1fr;gap:2.6rem}
+  .app-block{grid-template-columns:minmax(0,1fr);gap:2.6rem}
   .app-block.rev .app-info{order:1}
   .app-block.rev .app-visual{order:2}
 }
