@@ -156,7 +156,7 @@ h2 em{font-style:normal;color:var(--gold)}
 @keyframes sway{from{margin-left:0}to{margin-left:34px}}
 @keyframes glow{0%,100%{filter:brightness(.6)}50%{filter:brightness(1.5)}}
 
-.hero-inner{position:relative;text-align:center;z-index:2}
+.hero-inner{position:relative;text-align:center;z-index:2;width:100%;min-width:0}
 
 .hero h1{
   font-family:var(--display);font-weight:800;
@@ -420,6 +420,7 @@ h2 em{font-style:normal;color:var(--gold)}
 .mk-lead{margin-top:2rem;color:var(--text);font-size:clamp(.95rem,2.2vw,1.1rem)}
 /* ---- MonoKit: 現在のダウンロード状況 ---- */
 .ds-block{max-width:880px;margin:0 auto;text-align:center;padding:3rem 0}
+.ds-block.ds-main{margin-top:4.5rem;padding-top:4rem;border-top:1px solid var(--line)}
 .ds-label{
   font-size:.82rem;letter-spacing:.3em;color:var(--gold);margin-bottom:1rem;
 }
