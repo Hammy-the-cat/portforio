@@ -682,3 +682,15 @@ footer .paw{color:var(--gold)}
   html{scroll-behavior:auto}
   .fade-in{opacity:1;transform:none}
 }
+
+.ds-periods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem;margin:2.6rem auto 0;max-width:1000px;text-align:center}
+.ds-period{padding:1.8rem 1rem;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(229,181,88,.055),rgba(11,14,29,.3));min-width:0}
+.ds-period-tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.25em;color:var(--gold);margin-bottom:.45rem}
+.ds-period h3{font-family:var(--display);font-size:1.4rem;color:var(--moon)}
+.ds-period .ds-metrics{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1.5rem;max-width:none}
+.ds-period .ds-metric{padding:.4rem .5rem;border-top:0}
+.ds-period .ds-metric+.ds-metric{border-left:1px solid var(--line)}
+.ds-period .ds-metric dd{font-size:clamp(2.5rem,5vw,3.8rem);margin:0}
+.ds-period .ds-metric dt{font-size:.62rem;letter-spacing:.13em}
+.ds-period .ds-countries{margin-top:1.4rem}.ds-ads{font-family:var(--mono);letter-spacing:.18em;font-size:.75rem;color:var(--gold);margin-top:1rem}
+@media(max-width:640px){.ds-periods{grid-template-columns:1fr;gap:1rem}.ds-period{padding:1.4rem .8rem}.ds-period .ds-metrics{max-width:100%}}
