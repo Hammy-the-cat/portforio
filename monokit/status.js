@@ -1,70 +1,20 @@
-/* ================================================================
-   MonoKit「現在のダウンロード状況」スライド
-   数値・文言・国名・集計日・注記を更新するときは、このオブジェクトだけを編集する。
-   - snapshotDate: 集計日が確認できたときだけ "YYYY-MM-DD" を入れる（未確認なら null のまま。仮の日付は入れない）
-   - metrics: 値(value)と下限表現(suffix)は分けて持つ。正確な集計値に切り替えるときは suffix を "" にする
-   - countries: 国数(countries の value)と整合させる。一部抜粋なら countriesPartial を true にする
-   - *En: 英語表示(ENボタン)用の訳。日本語側の文言が正
-================================================================ */
-window.MONOKIT_STATUS = {
-  sectionLabel: '現在のダウンロード状況',
-  sectionLabelEn: 'Current downloads',
-  headline: 'Small apps. Global users.',
-  description: '九州の片田舎からリリースしたニッチアプリが、広告なしで少しずつ世界へ届き始めています。',
-  descriptionEn: 'Niche apps released from a quiet corner of Kyushu are slowly starting to reach the world — with no ads.',
-  snapshotDate: null,
-  metrics: [
-    { id: 'downloads', value: 23, suffix: '+', label: 'Downloads' },
-    { id: 'countries', value: 7,  suffix: '+', label: 'Countries' },
-    { id: 'ads',       value: 0,  suffix: '',  label: 'Ads' }
-  ],
-  scopeNote: 'Downloadsは3アプリ合計の確認済みスナップショット。CountriesはField Hockey Stats Trackerで確認できた到達国数。Adsは広告出稿の実績を示します。',
-  scopeNoteEn: 'Downloads is a confirmed snapshot of the total across 3 apps. Countries is the number of countries confirmed for Field Hockey Stats Tracker. Ads refers to ad spend.',
-  countryApp: 'Field Hockey Stats Tracker',
-  countries:   ['フランス', 'オランダ', 'ベルギー', 'イタリア', 'ポーランド', 'イギリス', 'カタール'],
-  countriesEn: ['France', 'Netherlands', 'Belgium', 'Italy', 'Poland', 'United Kingdom', 'Qatar'],
-  countriesPartial: false,
-  closingMessage: 'まだ大きな数字じゃない。でも、世界のどこかで本当に使ってくれる人がいる。',
-  closingMessageEn: 'Not big numbers yet. But somewhere in the world, someone is really using them.'
-};
-
+/* Public aggregate only. API keys and private dashboard data never reach this page. */
 (() => {
-  const d = window.MONOKIT_STATUS;
-  const root = document.getElementById('download-status-body');
-  if (!d || !root) return;
-
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const en = (s) => s ? ` data-en="${esc(s)}"` : '';
-
-  let dateJa = '', dateEn = '';
-  if (d.snapshotDate) {
-    const [y, m, day] = d.snapshotDate.split('-').map(Number);
-    dateJa = `${y}年${m}月${day}日時点。`;
-    dateEn = `As of ${new Date(y, m - 1, day).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}. `;
-  }
-
-  const countriesMetric = d.metrics.find(m => m.id === 'countries');
-  if (countriesMetric && d.countries.length !== countriesMetric.value && !d.countriesPartial) {
-    console.warn('MONOKIT_STATUS: countries の件数と Countries の値が一致しません');
-  }
-  const partialJa = d.countriesPartial ? '（一部抜粋）' : '';
-  const partialEn = d.countriesPartial ? ' (partial list)' : '';
-
-  root.innerHTML = `
-    <p class="ds-label"${en(d.sectionLabelEn)}>${esc(d.sectionLabel)}</p>
-    <h2 class="ds-headline" id="download-status-title">${esc(d.headline)}</h2>
-    <p class="ds-desc"${en(d.descriptionEn)}>${esc(d.description)}</p>
-    <dl class="ds-metrics">
-      ${d.metrics.map(m => `
-      <div class="ds-metric">
-        <dt>${esc(m.label)}</dt>
-        <dd>${esc(m.value)}${m.suffix ? `<span class="ds-suffix">${esc(m.suffix)}</span>` : ''}</dd>
-      </div>`).join('')}
-    </dl>
-    <p class="ds-note" data-en="${esc(dateEn + d.scopeNoteEn)}">${esc(dateJa + d.scopeNote)}</p>
-    <div class="ds-countries">
-      <p class="ds-countries-title" data-en="${esc('Countries reached by ' + d.countryApp + partialEn)}">${esc(d.countryApp)} が届いた国${partialJa}</p>
-      <ul>${d.countries.map((c, i) => `<li${en(d.countriesEn && d.countriesEn[i])}>${esc(c)}</li>`).join('')}</ul>
-    </div>
-    <p class="ds-closing"${en(d.closingMessageEn)}>${esc(d.closingMessage)}</p>`;
+ const root=document.getElementById('download-status-body');if(!root)return;
+ let data=null,failed=false;
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function render(){
+  const en=document.documentElement.lang==='en',has=data?.reportDays>0;
+  const names=new Intl.DisplayNames([en?'en':'ja'],{type:'region'});
+  const codes=(data?.countries||[]).filter(c=>c!=='ZZ');
+  const regions=codes.map(c=>{try{return names.of(c);}catch{return c;}});
+  const num=v=>Number(v).toLocaleString(en?'en-US':'ja-JP');
+  const updated=data?.updatedAt?new Date(data.updatedAt).toLocaleString(en?'en-GB':'ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+  const note=data?(en?`4 apps combined · ${data.period.start} – ${data.period.end} (Pacific Time). ${data.reportDays} of 30 daily reports available. Missing days are not counted as zero. First-time downloads, net of adjustments; not lifetime totals. Ads: manually maintained advertising activity.`:`4アプリ合計・${data.period.start}〜${data.period.end}（米国太平洋時間）。30日中${data.reportDays}日分を取得。未取得日は0件として扱いません。初回取得数（返品等の調整を含む）で、累計ではありません。Adsは広告出稿の手動設定です。`):(failed?(en?'Data is temporarily unavailable. Please try again later.':'現在データを取得できません。時間をおいて再読み込みしてください。'):(en?'Loading the latest report data…':'最新のレポートを読み込んでいます…'));
+  root.innerHTML=`<p class="ds-label">${en?'Downloads · last 30 days':'直近30日間のダウンロード状況'}</p><h2 class="ds-headline" id="download-status-title">Small apps. Global users.</h2><p class="ds-desc">${en?'Small apps from a quiet corner of Kyushu, reaching people around the world.':'九州の片田舎からリリースした小さなアプリが、少しずつ世界へ届いています。'}</p><dl class="ds-metrics"><div class="ds-metric"><dt>Downloads</dt><dd>${has?esc(num(data.downloads)):'—'}</dd></div><div class="ds-metric"><dt>Countries / Regions</dt><dd>${has?codes.length:'—'}</dd></div><div class="ds-metric"><dt>Ads</dt><dd>0</dd></div></dl><p class="ds-note">${esc(note)}${updated?`<br>${en?'Updated':'最終データ取得'} ${esc(updated)} ${en?'JST':'（日本時間）'}`:''}</p><div class="ds-countries"><p class="ds-countries-title">${en?'Countries and regions reached by the 4 apps during this period':'この期間に4アプリが届いた国・地域'}</p><ul>${regions.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>${has&&!regions.length?`<p>${en?'No confirmed countries or regions yet.':'確認できた国・地域はまだありません。'}</p>`:''}</div><p class="ds-closing">${en?'Small steps, reaching a little farther.':'小さなアプリで、少しずつ遠くへ。'}</p>`;
+ }
+ render();document.addEventListener('langchange',render);
+ fetch('https://hammy-workdesk.excitedcherry0909.workers.dev/api/public/downloads',{credentials:'omit',signal:AbortSignal.timeout(10000)})
+ .then(r=>{if(!r.ok)throw Error();return r.json();}).then(d=>{if(!d.period||!Array.isArray(d.countries)||!Number.isInteger(d.reportDays)||!(d.downloads===null||Number.isFinite(d.downloads)))throw Error();data=d;render();})
+ .catch(()=>{failed=true;render();});
 })();
