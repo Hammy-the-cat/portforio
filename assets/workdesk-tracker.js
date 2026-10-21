@@ -28,7 +28,7 @@
     let url; try { url = new URL(link.href); } catch { return; }
     if (url.hostname === 'apps.apple.com') {
       const id = /\/id(\d+)/.exec(url.pathname)?.[1];
-      if (['6800731074', '6799425026', '6802944632', '6808957187'].includes(id)) send('store_click', id);
+      if (['6800731074', '6799425026', '6802944632', '6808957187', '6813879614'].includes(id)) send('store_click', id);
     } else if (url.origin === location.origin && /^\/monokit\/?$/.test(url.pathname) && path === '/') {
       send('monokit_click', url.hash.slice(1) || 'monokit');
     }
