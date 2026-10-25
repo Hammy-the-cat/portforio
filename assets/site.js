@@ -191,3 +191,28 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
   });
 })();
 
+
+/* ---------- MonoKit背景動画: ページ読込後に読み込み、軽量化のため条件付き ---------- */
+(() => {
+  const v = document.getElementById('mkBgVideo');
+  if (!v) return;
+  const conn = navigator.connection || {};
+  const portrait = window.matchMedia('(orientation: portrait)');
+  // 動きを減らす設定・データ節約時は、動画の代わりに静止画を薄く表示
+  if (reduceMotion || conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '')) {
+    v.poster = portrait.matches ? v.dataset.posterPort : v.dataset.posterLand;
+    v.classList.add('on');
+    return;
+  }
+  const start = () => {
+    v.src = portrait.matches ? v.dataset.port : v.dataset.land;
+    v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+    v.play().catch(() => {});
+  };
+  if (document.readyState === 'complete') setTimeout(start, 300);
+  else window.addEventListener('load', () => setTimeout(start, 300), { once: true });
+  document.addEventListener('visibilitychange', () => {
+    if (!v.src) return;
+    if (document.hidden) v.pause(); else v.play().catch(() => {});
+  });
+})();

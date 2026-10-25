@@ -416,6 +416,24 @@ h2 em{font-style:normal;color:var(--gold)}
     radial-gradient(1200px 700px at 50% -10%, #1d2750 0%, transparent 60%),
     var(--ink);
 }
+/* MonoKitページ: 背景のアイキャッチ動画（画面に固定して薄く表示） */
+.mk-bgvideo{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.mk-bgvideo video{
+  width:100%;height:100%;object-fit:cover;display:block;
+  opacity:0;transition:opacity 1.6s ease;
+}
+.mk-bgvideo video.on{opacity:.24}
+.mk-bgvideo::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at center, rgba(11,14,29,0) 35%, rgba(11,14,29,.75) 100%);
+}
+.mk-page .mk-hero{
+  background:
+    radial-gradient(900px 520px at 50% 40%, rgba(226,179,90,.10), transparent 65%),
+    radial-gradient(1200px 700px at 50% -10%, rgba(29,39,80,.7) 0%, transparent 60%);
+}
+.mk-page .apps{background:transparent}
+.mk-page .mk-end{background:linear-gradient(rgba(11,14,29,0),rgba(20,26,51,.85))}
 .mk-hero .brand-lockup{margin-bottom:0;width:100%;min-width:0}
 .mk-hero .brand-title{font-size:clamp(1.8rem,5vw,3.4rem)}
 .mk-lead{margin-top:2rem;color:var(--text);font-size:clamp(.95rem,2.2vw,1.1rem)}

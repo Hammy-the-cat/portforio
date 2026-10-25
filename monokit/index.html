@@ -8,9 +8,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+1+Code:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/site.css?v=20261021">
+<link rel="stylesheet" href="../assets/site.css?v=20261026">
 </head>
-<body>
+<body class="mk-page">
+
+<!-- 背景のアイキャッチ動画（薄く表示。ページ読込後にJSで読み込み開始） -->
+<div class="mk-bgvideo" aria-hidden="true">
+  <video id="mkBgVideo" muted loop playsinline preload="none"
+    data-land="../assets/video/monokit-bg-16x9.mp4" data-port="../assets/video/monokit-bg-9x16.mp4"
+    data-poster-land="../assets/video/monokit-bg-16x9.jpg" data-poster-port="../assets/video/monokit-bg-9x16.jpg"></video>
+</div>
 
 <a class="mk-nav" href="../" data-en="← Hammy The Cat">← Hammy The Cat</a>
 <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language / 言語を切り替え">EN</button>
@@ -207,7 +214,7 @@
   </div>
 </section>
 
-<section class="contact" style="background:linear-gradient(var(--ink),var(--indigo))">
+<section class="contact mk-end">
   <div class="wrap">
     <p class="msg-jp fade-in" data-en="More small, focused apps are on the way 🐾">ひとつの用途のための小さなアプリ、これからも増えていきます🐾</p>
     <div class="cta-row fade-in">
@@ -222,7 +229,7 @@
 
 <div id="fireflies" aria-hidden="true"></div>
 
-<script src="../assets/site.js"></script>
+<script src="../assets/site.js?v=20261026"></script>
 <script src="../assets/workdesk-tracker.js?v=20261021" defer></script>
 </body>
 </html>
